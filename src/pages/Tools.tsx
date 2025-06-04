@@ -12,7 +12,7 @@ import { ArrowLeft } from 'lucide-react';
 const Tools = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [activeGenerator, setActiveGenerator] = useState(searchParams.get('active') || 'color-palette');
+  const [activeGenerator, setActiveGenerator] = useState(searchParams.get('active') || 'qr-code');
   const [copiedText, setCopiedText] = useState('');
 
   // Generator states
@@ -143,9 +143,31 @@ const Tools = () => {
     setLoremText(result.trim());
   };
 
-  const generateRandomNumber = (min: number, max: number, isInteger: boolean) => {
-    const random = Math.random() * (max - min) + min;
-    const result = isInteger ? Math.floor(random) : Math.round(random * 100) / 100;
+  const generateRandomNumber = (min: number, max: number, isInteger: boolean, includeNegative: boolean, isFraction: boolean) => {
+    let random;
+    
+    if (isFraction) {
+      // Generate fraction between min and max
+      const numerator = Math.floor(Math.random() * 20) + 1; // 1-20
+      const denominator = Math.floor(Math.random() * 10) + 2; // 2-11
+      random = (numerator / denominator) * (max - min) + min;
+    } else {
+      random = Math.random() * (max - min) + min;
+    }
+    
+    if (includeNegative && Math.random() > 0.5) {
+      random = -random;
+    }
+    
+    let result;
+    if (isInteger && !isFraction) {
+      result = Math.floor(random);
+    } else if (isFraction) {
+      result = Math.round(random * 1000) / 1000; // 3 decimal places for fractions
+    } else {
+      result = Math.round(random * 100) / 100;
+    }
+    
     setRandomNumber(result);
   };
 
@@ -173,7 +195,7 @@ const Tools = () => {
   };
 
   const generateGradient = (color1: string, color2: string, direction: string) => {
-    const css = `background: linear-gradient(${direction}, ${color1}, ${color2});`;
+    const css = `linear-gradient(${direction}, ${color1}, ${color2})`;
     setGradientCSS(css);
   };
 
@@ -244,11 +266,11 @@ const Tools = () => {
   };
 
   const generators = [
+    { id: 'qr-code', name: 'QR Code', icon: '📱', gradient: 'from-orange-500 to-amber-500' },
     { id: 'color-palette', name: 'Color Palette', icon: '🎨', gradient: 'from-pink-500 to-rose-500' },
     { id: 'lorem-ipsum', name: 'Lorem Ipsum', icon: '📝', gradient: 'from-blue-500 to-cyan-500' },
     { id: 'random-number', name: 'Random Number', icon: '🎲', gradient: 'from-purple-500 to-indigo-500' },
     { id: 'password', name: 'Password', icon: '🔒', gradient: 'from-green-500 to-emerald-500' },
-    { id: 'qr-code', name: 'QR Code', icon: '📱', gradient: 'from-orange-500 to-amber-500' },
     { id: 'css-gradient', name: 'CSS Gradient', icon: '🌈', gradient: 'from-violet-500 to-purple-500' },
     { id: 'profile', name: 'Profile', icon: '👤', gradient: 'from-teal-500 to-cyan-500' },
     { id: 'placeholder', name: 'Placeholder Image', icon: '🖼️', gradient: 'from-red-500 to-pink-500' },
@@ -311,31 +333,44 @@ const Tools = () => {
           {/* Render generator content here - keeping the same implementation as before but with mobile-first styling */}
           {/* For brevity, I'll implement just one generator as an example */}
           {activeGenerator === 'color-palette' && (
-            <Card className="animate-fade-in border-0 shadow-xl">
-              <CardHeader className="text-center">
-                <CardTitle className="text-xl">🎨 Color Palette Generator</CardTitle>
+            <Card className="animate-fade-in border-0 shadow-xl bg-gradient-to-br from-white to-pink-50">
+              <CardHeader className="text-center pb-2">
+                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
+                  🎨 Color Palette Generator
+                </CardTitle>
+                <p className="text-gray-600 text-sm">Create harmonious color schemes instantly</p>
               </CardHeader>
               <CardContent className="space-y-6">
                 <Button 
                   onClick={generateColorPalette} 
-                  className={`w-full bg-gradient-to-r ${currentTool?.gradient} hover:shadow-lg transform transition-all duration-300 hover:scale-105 py-3 text-lg`}
+                  className={`w-full bg-gradient-to-r ${currentTool?.gradient} hover:shadow-lg transform transition-all duration-300 hover:scale-105 py-4 text-lg font-semibold rounded-xl`}
                 >
-                  Generate Color Palette
+                  ✨ Generate New Palette
                 </Button>
                 {colorPalette.length > 0 && (
-                  <div className="grid grid-cols-5 gap-2">
-                    {colorPalette.map((color, index) => (
-                      <div key={index} className="text-center">
-                        <div
-                          className="w-full h-20 rounded cursor-pointer border-2 border-gray-200"
-                          style={{ backgroundColor: color }}
-                          onClick={() => copyToClipboard(color)}
-                          title="Click to copy"
-                        />
-                        <p className="text-sm mt-1 font-mono">{color}</p>
-                        {copiedText === color && <p className="text-xs text-green-600">Copied!</p>}
-                      </div>
-                    ))}
+                  <div className="space-y-4">
+                    <h3 className="text-lg font-semibold text-gray-800 text-center">Your Color Palette</h3>
+                    <div className="grid grid-cols-5 gap-3">
+                      {colorPalette.map((color, index) => (
+                        <div key={index} className="text-center animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
+                          <div
+                            className="w-full h-24 rounded-xl cursor-pointer border-3 border-white shadow-lg transform transition-all duration-300 hover:scale-110 hover:shadow-xl"
+                            style={{ backgroundColor: color }}
+                            onClick={() => copyToClipboard(color)}
+                            title="Click to copy color"
+                          />
+                          <p className="text-xs mt-2 font-mono font-semibold text-gray-700">{color}</p>
+                          {copiedText === color && (
+                            <p className="text-xs text-green-600 font-semibold animate-fade-in">✓ Copied!</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-gray-200">
+                      <p className="text-sm text-gray-600 text-center">
+                        💡 <strong>Tip:</strong> Click any color to copy its HEX code to clipboard
+                      </p>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -400,24 +435,41 @@ const Tools = () => {
                     <Input id="max" type="number" defaultValue="100" />
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Checkbox id="integer" defaultChecked />
-                  <Label htmlFor="integer">Integer only</Label>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="integer" defaultChecked />
+                    <Label htmlFor="integer">Integer only</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="decimal" />
+                    <Label htmlFor="decimal">Decimal numbers</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="negative" />
+                    <Label htmlFor="negative">Include negative numbers</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="fraction" />
+                    <Label htmlFor="fraction">Generate fraction</Label>
+                  </div>
                 </div>
                 <Button
                   onClick={() => {
                     const min = parseFloat((document.getElementById('min') as HTMLInputElement).value) || 1;
                     const max = parseFloat((document.getElementById('max') as HTMLInputElement).value) || 100;
                     const isInteger = (document.getElementById('integer') as HTMLInputElement).checked;
-                    generateRandomNumber(min, max, isInteger);
+                    const includeNegative = (document.getElementById('negative') as HTMLInputElement).checked;
+                    const isFraction = (document.getElementById('fraction') as HTMLInputElement).checked;
+                    generateRandomNumber(min, max, isInteger, includeNegative, isFraction);
                   }}
                   className="w-full"
                 >
                   Generate Random Number
                 </Button>
                 {randomNumber !== null && (
-                  <div className="text-center p-4 bg-gray-50 rounded-lg">
-                    <p className="text-2xl font-bold">{randomNumber}</p>
+                  <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-indigo-50 rounded-lg border-2 border-purple-200">
+                    <p className="text-3xl font-bold text-purple-800">{randomNumber}</p>
+                    <p className="text-sm text-purple-600 mt-2">Your random number</p>
                   </div>
                 )}
               </CardContent>
@@ -459,11 +511,17 @@ const Tools = () => {
                     const includeLower = (document.getElementById('lowercase') as HTMLInputElement).checked;
                     const includeNumbers = (document.getElementById('numbers') as HTMLInputElement).checked;
                     const includeSymbols = (document.getElementById('symbols') as HTMLInputElement).checked;
+                    
+                    if (!includeUpper && !includeLower && !includeNumbers && !includeSymbols) {
+                      alert('Please select at least one character type!');
+                      return;
+                    }
+                    
                     generatePassword(length, includeUpper, includeLower, includeNumbers, includeSymbols);
                   }}
                   className="w-full"
                 >
-                  Generate Password
+                  Generate Secure Password
                 </Button>
                 {password && (
                   <div className="space-y-2">
@@ -564,17 +622,23 @@ const Tools = () => {
                 >
                   Generate Gradient
                 </Button>
-                {gradientCSS && (
-                  <div className="space-y-2">
-                    <div
-                      className="w-full h-24 rounded border"
-                      style={{ background: gradientCSS.replace('background: ', '') }}
-                    />
-                    <div className="p-3 bg-gray-50 rounded border font-mono text-sm">
-                      {gradientCSS}
+                 {gradientCSS && (
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-2">Generated Gradient</h3>
+                      <div
+                        className="w-full h-32 rounded-xl border-2 border-gray-200 shadow-lg"
+                        style={{ background: gradientCSS }}
+                      />
                     </div>
-                    <Button onClick={() => copyToClipboard(gradientCSS)} variant="outline" className="w-full">
-                      {copiedText === gradientCSS ? 'Copied!' : 'Copy CSS'}
+                    <div className="bg-white p-4 rounded-xl border border-gray-200">
+                      <h4 className="font-semibold text-gray-700 mb-2">CSS Code:</h4>
+                      <div className="p-3 bg-gray-50 rounded-lg border font-mono text-sm break-all">
+                        background: {gradientCSS};
+                      </div>
+                    </div>
+                    <Button onClick={() => copyToClipboard(`background: ${gradientCSS};`)} variant="outline" className="w-full">
+                      {copiedText === `background: ${gradientCSS};` ? 'Copied!' : 'Copy CSS Code'}
                     </Button>
                   </div>
                 )}
@@ -592,10 +656,35 @@ const Tools = () => {
                   Generate Random Profile
                 </Button>
                 {profile.firstName && (
-                  <div className="p-4 bg-gray-50 rounded-lg space-y-2">
-                    <h3 className="font-bold text-lg">{profile.firstName} {profile.lastName}</h3>
-                    <p className="text-gray-600">{profile.bio}</p>
-                    <p className="text-sm text-gray-500">📍 {profile.city}, {profile.country}</p>
+                  <div className="space-y-4">
+                    <div className="p-6 bg-gradient-to-br from-teal-50 to-cyan-50 rounded-xl border-2 border-teal-200">
+                      <div className="space-y-3">
+                        <div>
+                          <h4 className="text-sm font-semibold text-teal-700">👤 Name:</h4>
+                          <h3 className="text-xl font-bold text-gray-800">{profile.firstName} {profile.lastName}</h3>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-teal-700">📝 Bio:</h4>
+                          <p className="text-gray-700">{profile.bio}</p>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-teal-700">📍 Location:</h4>
+                          <p className="text-gray-700">{profile.city}, {profile.country}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                      <div className="flex items-start space-x-2">
+                        <span className="text-yellow-600 text-lg">⚠️</span>
+                        <div>
+                          <h4 className="font-semibold text-yellow-800">Testing Purpose Only</h4>
+                          <p className="text-sm text-yellow-700">
+                            This generated profile is for testing and development purposes only. 
+                            Do not use this information for any real-world applications or misrepresent it as actual personal data.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -610,22 +699,22 @@ const Tools = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="width">Width</Label>
+                    <Label htmlFor="width">Width (px)</Label>
                     <Input id="width" type="number" defaultValue="300" />
                   </div>
                   <div>
-                    <Label htmlFor="height">Height</Label>
+                    <Label htmlFor="height">Height (px)</Label>
                     <Input id="height" type="number" defaultValue="200" />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="bg-color">Background Color</Label>
-                    <Input id="bg-color" defaultValue="#cccccc" />
+                    <Input id="bg-color" type="color" defaultValue="#cccccc" />
                   </div>
                   <div>
                     <Label htmlFor="text-color">Text Color</Label>
-                    <Input id="text-color" defaultValue="#ffffff" />
+                    <Input id="text-color" type="color" defaultValue="#ffffff" />
                   </div>
                 </div>
                 <Button
@@ -638,16 +727,22 @@ const Tools = () => {
                   }}
                   className="w-full"
                 >
-                  Generate Placeholder URL
+                  Generate Placeholder Image
                 </Button>
                 {placeholderUrl && (
-                  <div className="space-y-2">
-                    <img src={placeholderUrl} alt="Placeholder" className="mx-auto border rounded" />
-                    <div className="p-3 bg-gray-50 rounded border font-mono text-sm break-all">
-                      {placeholderUrl}
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-3">Generated Placeholder</h3>
+                      <img src={placeholderUrl} alt="Generated Placeholder" className="mx-auto border-2 border-gray-200 rounded-lg shadow-lg" />
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-gray-200">
+                      <h4 className="font-semibold text-gray-700 mb-2">Image URL:</h4>
+                      <div className="p-3 bg-gray-50 rounded-lg border font-mono text-sm break-all">
+                        {placeholderUrl}
+                      </div>
                     </div>
                     <Button onClick={() => copyToClipboard(placeholderUrl)} variant="outline" className="w-full">
-                      {copiedText === placeholderUrl ? 'Copied!' : 'Copy URL'}
+                      {copiedText === placeholderUrl ? 'Copied!' : 'Copy Image URL'}
                     </Button>
                   </div>
                 )}
@@ -702,17 +797,40 @@ const Tools = () => {
           )}
 
           {activeGenerator === 'quotes' && (
-            <Card className="animate-fade-in border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle>💭 Random Quote Generator</CardTitle>
+            <Card className="animate-fade-in border-0 shadow-xl bg-gradient-to-br from-white to-indigo-50">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-blue-600 bg-clip-text text-transparent">
+                  💭 Random Quote Generator
+                </CardTitle>
+                <p className="text-gray-600 text-sm">Get inspired with wisdom and motivation</p>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Button onClick={getRandomQuote} className="w-full">
-                  Get Random Quote
+              <CardContent className="space-y-6">
+                <Button 
+                  onClick={getRandomQuote} 
+                  className={`w-full bg-gradient-to-r ${currentTool?.gradient} hover:shadow-lg transform transition-all duration-300 hover:scale-105 py-4 text-lg font-semibold rounded-xl`}
+                >
+                  ✨ Get Inspirational Quote
                 </Button>
                 {currentQuote && (
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-lg italic">"{currentQuote}"</p>
+                  <div className="animate-fade-in">
+                    <div className="relative bg-gradient-to-br from-indigo-100 to-blue-100 p-6 rounded-2xl border-2 border-indigo-200 shadow-lg">
+                      <div className="absolute top-4 left-4 text-4xl text-indigo-300">"</div>
+                      <div className="absolute bottom-4 right-4 text-4xl text-indigo-300 rotate-180">"</div>
+                      <div className="px-6 py-2">
+                        <p className="text-lg font-medium text-gray-800 leading-relaxed text-center italic">
+                          {currentQuote}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-center mt-4">
+                      <Button 
+                        onClick={() => copyToClipboard(currentQuote)} 
+                        variant="outline" 
+                        className="px-6 py-2 rounded-xl"
+                      >
+                        {copiedText === currentQuote ? 'Copied!' : 'Copy Quote'}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -773,17 +891,39 @@ const Tools = () => {
           )}
 
           {activeGenerator === 'would-you-rather' && (
-            <Card className="animate-fade-in border-0 shadow-xl">
-              <CardHeader>
-                <CardTitle>🤔 Would You Rather Generator</CardTitle>
+            <Card className="animate-fade-in border-0 shadow-xl bg-gradient-to-br from-white to-yellow-50">
+              <CardHeader className="text-center">
+                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-yellow-600 to-orange-600 bg-clip-text text-transparent">
+                  🤔 Would You Rather Generator
+                </CardTitle>
+                <p className="text-gray-600 text-sm">Fun questions to spark conversations</p>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <Button onClick={getRandomWouldYouRather} className="w-full">
-                  Get New Question
+              <CardContent className="space-y-6">
+                <Button 
+                  onClick={getRandomWouldYouRather} 
+                  className={`w-full bg-gradient-to-r ${currentTool?.gradient} hover:shadow-lg transform transition-all duration-300 hover:scale-105 py-4 text-lg font-semibold rounded-xl`}
+                >
+                  🎲 Get New Question
                 </Button>
                 {wouldYouRather && (
-                  <div className="p-4 bg-gray-50 rounded-lg">
-                    <p className="text-lg font-medium">{wouldYouRather}</p>
+                  <div className="animate-fade-in">
+                    <div className="bg-gradient-to-br from-yellow-100 to-orange-100 p-6 rounded-2xl border-2 border-yellow-200 shadow-lg">
+                      <div className="text-center">
+                        <div className="text-4xl mb-3">🤔</div>
+                        <p className="text-lg font-semibold text-gray-800 leading-relaxed">
+                          {wouldYouRather}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-center mt-4">
+                      <Button 
+                        onClick={() => copyToClipboard(wouldYouRather)} 
+                        variant="outline" 
+                        className="px-6 py-2 rounded-xl"
+                      >
+                        {copiedText === wouldYouRather ? 'Copied!' : 'Copy Question'}
+                      </Button>
+                    </div>
                   </div>
                 )}
               </CardContent>
