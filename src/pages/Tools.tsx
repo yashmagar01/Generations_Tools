@@ -67,10 +67,10 @@ const Tools = () => {
     "Would you rather be able to control fire or water?"
   ];
 
-  const firstNames = ["Alex", "Jordan", "Taylor", "Morgan", "Casey", "Riley", "Avery", "Quinn", "Dakota", "Sage"];
-  const lastNames = ["Smith", "Johnson", "Williams", "Brown", "Jones", "Garcia", "Miller", "Davis", "Rodriguez", "Martinez"];
-  const cities = ["New York", "Los Angeles", "London", "Paris", "Tokyo", "Sydney", "Berlin", "Toronto", "Singapore", "Amsterdam"];
-  const countries = ["USA", "UK", "France", "Japan", "Australia", "Germany", "Canada", "Netherlands", "Switzerland", "Sweden"];
+  const indianFirstNames = ["Aarav", "Vivaan", "Aditi", "Saanvi", "Vihaan", "Aditya", "Ananya", "Ishaan", "Diya", "Arjun", "Kavya", "Rudra", "Kiara", "Shaurya", "Aadhya", "Karan", "Myra", "Dev", "Riya", "Aryan"];
+  const indianLastNames = ["Sharma", "Verma", "Singh", "Kumar", "Gupta", "Agarwal", "Patel", "Jain", "Reddy", "Rao", "Nair", "Iyer", "Shah", "Malhotra", "Chopra", "Bansal", "Mittal", "Kapoor", "Saxena", "Tiwari"];
+  const indianCities = ["Mumbai", "Delhi", "Bangalore", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Indore", "Thane", "Bhopal", "Visakhapatnam", "Vadodara", "Firozabad"];
+  const countries = ["India"];
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -200,9 +200,9 @@ const Tools = () => {
   };
 
   const generateProfile = () => {
-    const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
-    const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];
-    const city = cities[Math.floor(Math.random() * cities.length)];
+    const firstName = indianFirstNames[Math.floor(Math.random() * indianFirstNames.length)];
+    const lastName = indianLastNames[Math.floor(Math.random() * indianLastNames.length)];
+    const city = indianCities[Math.floor(Math.random() * indianCities.length)];
     const country = countries[Math.floor(Math.random() * countries.length)];
     
     const bios = [
@@ -219,7 +219,8 @@ const Tools = () => {
   };
 
   const generatePlaceholderUrl = (width: number, height: number, bgColor: string = "cccccc", textColor: string = "ffffff") => {
-    const url = `https://via.placeholder.com/${width}x${height}/${bgColor.replace('#', '')}/${textColor.replace('#', '')}`;
+    // Using picsum.photos for working placeholder images
+    const url = `https://picsum.photos/${width}/${height}?random=${Math.floor(Math.random() * 1000)}`;
     setPlaceholderUrl(url);
   };
 
@@ -267,7 +268,7 @@ const Tools = () => {
 
   const generators = [
     { id: 'qr-code', name: 'QR Code', icon: '📱', gradient: 'from-orange-500 to-amber-500' },
-    { id: 'color-palette', name: 'Color Palette', icon: '🎨', gradient: 'from-pink-500 to-rose-500' },
+    { id: 'color-palette', name: 'Color Palette', icon: '🎨', gradient: 'from-slate-600 to-gray-700' },
     { id: 'lorem-ipsum', name: 'Lorem Ipsum', icon: '📝', gradient: 'from-blue-500 to-cyan-500' },
     { id: 'random-number', name: 'Random Number', icon: '🎲', gradient: 'from-purple-500 to-indigo-500' },
     { id: 'password', name: 'Password', icon: '🔒', gradient: 'from-green-500 to-emerald-500' },
@@ -333,43 +334,52 @@ const Tools = () => {
           {/* Render generator content here - keeping the same implementation as before but with mobile-first styling */}
           {/* For brevity, I'll implement just one generator as an example */}
           {activeGenerator === 'color-palette' && (
-            <Card className="animate-fade-in border-0 shadow-xl bg-gradient-to-br from-white to-pink-50">
+            <Card className="animate-fade-in border-0 shadow-xl bg-gradient-to-br from-white to-slate-50">
               <CardHeader className="text-center pb-2">
-                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-pink-600 to-rose-600 bg-clip-text text-transparent">
-                  🎨 Color Palette Generator
+                <CardTitle className="text-2xl font-bold bg-gradient-to-r from-slate-700 to-gray-800 bg-clip-text text-transparent flex items-center justify-center gap-2">
+                  <span className="text-2xl">🎨</span>
+                  Color Palette Generator
                 </CardTitle>
-                <p className="text-gray-600 text-sm">Create harmonious color schemes instantly</p>
+                <p className="text-gray-600 text-sm">Professional color schemes for your designs</p>
               </CardHeader>
               <CardContent className="space-y-6">
                 <Button 
                   onClick={generateColorPalette} 
-                  className={`w-full bg-gradient-to-r ${currentTool?.gradient} hover:shadow-lg transform transition-all duration-300 hover:scale-105 py-4 text-lg font-semibold rounded-xl`}
+                  className={`w-full bg-gradient-to-r from-slate-600 to-gray-700 hover:from-slate-700 hover:to-gray-800 hover:shadow-lg transform transition-all duration-300 hover:scale-105 py-4 text-lg font-semibold rounded-xl flex items-center justify-center gap-2`}
                 >
-                  ✨ Generate New Palette
+                  <span>🎯</span> Generate Professional Palette
                 </Button>
                 {colorPalette.length > 0 && (
                   <div className="space-y-4">
-                    <h3 className="text-lg font-semibold text-gray-800 text-center">Your Color Palette</h3>
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                      <span className="text-lg">📊</span>
+                      <h3 className="text-lg font-semibold text-gray-800">Professional Color Palette</h3>
+                    </div>
                     <div className="grid grid-cols-5 gap-3">
                       {colorPalette.map((color, index) => (
                         <div key={index} className="text-center animate-scale-in" style={{ animationDelay: `${index * 100}ms` }}>
                           <div
-                            className="w-full h-24 rounded-xl cursor-pointer border-3 border-white shadow-lg transform transition-all duration-300 hover:scale-110 hover:shadow-xl"
+                            className="w-full h-24 rounded-lg cursor-pointer border-2 border-gray-300 shadow-md transform transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-gray-500"
                             style={{ backgroundColor: color }}
                             onClick={() => copyToClipboard(color)}
                             title="Click to copy color"
                           />
-                          <p className="text-xs mt-2 font-mono font-semibold text-gray-700">{color}</p>
+                          <p className="text-xs mt-2 font-mono font-semibold text-gray-700 bg-gray-100 px-2 py-1 rounded">{color}</p>
                           {copiedText === color && (
-                            <p className="text-xs text-green-600 font-semibold animate-fade-in">✓ Copied!</p>
+                            <p className="text-xs text-green-600 font-semibold animate-fade-in flex items-center justify-center gap-1">
+                              <span>✅</span> Copied!
+                            </p>
                           )}
                         </div>
                       ))}
                     </div>
-                    <div className="bg-white p-4 rounded-xl border border-gray-200">
-                      <p className="text-sm text-gray-600 text-center">
-                        💡 <strong>Tip:</strong> Click any color to copy its HEX code to clipboard
-                      </p>
+                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+                      <div className="flex items-center justify-center gap-2">
+                        <span className="text-blue-600">💼</span>
+                        <p className="text-sm text-slate-700 font-medium">
+                          Professional Tip: Click any color to copy its HEX code
+                        </p>
+                      </div>
                     </div>
                   </div>
                 )}

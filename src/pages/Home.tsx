@@ -8,11 +8,18 @@ const Home = () => {
 
   const tools = [
     { 
+      id: 'qr-code', 
+      name: 'QR Code', 
+      icon: '📱', 
+      description: 'Generate QR codes instantly',
+      gradient: 'from-orange-500 to-amber-500'
+    },
+    { 
       id: 'color-palette', 
       name: 'Color Palette', 
       icon: '🎨', 
       description: 'Generate beautiful color schemes',
-      gradient: 'from-pink-500 to-rose-500'
+      gradient: 'from-slate-600 to-gray-700'
     },
     { 
       id: 'lorem-ipsum', 
@@ -34,13 +41,6 @@ const Home = () => {
       icon: '🔒', 
       description: 'Create secure passwords',
       gradient: 'from-green-500 to-emerald-500'
-    },
-    { 
-      id: 'qr-code', 
-      name: 'QR Code', 
-      icon: '📱', 
-      description: 'Generate QR codes instantly',
-      gradient: 'from-orange-500 to-amber-500'
     },
     { 
       id: 'css-gradient', 
