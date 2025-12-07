@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ArrowLeft } from 'lucide-react';
+import ColorPalette from '@/components/tools/ColorPalette';
+import LoremIpsum from '@/components/tools/LoremIpsum';
+import RandomNumber from '@/components/tools/RandomNumber';
+import PasswordGenerator from '@/components/tools/PasswordGenerator';
+import CSSGradient from '@/components/tools/CSSGradient';
+import ProfileGenerator from '@/components/tools/ProfileGenerator';
+import PlaceholderImage from '@/components/tools/PlaceholderImage';
+import UniqueID from '@/components/tools/UniqueID';
+import RandomQuote from '@/components/tools/RandomQuote';
+import HashtagGenerator from '@/components/tools/HashtagGenerator';
+import WouldYouRather from '@/components/tools/WouldYouRather';
+import QRCodeGenerator from '@/components/tools/QRCodeGenerator';
 
 const Tools = () => {
   const [searchParams] = useSearchParams();
