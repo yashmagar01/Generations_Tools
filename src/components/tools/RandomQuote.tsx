@@ -53,34 +53,36 @@ const RandomQuote = () => {
           </Button> 
        </Card>
 
-       <div className="lg:col-span-2 flex items-center justify-center p-8 rounded-3xl bg-slate-900 shadow-2xl relative overflow-hidden min-h-[400px]">
-           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(99,102,241,0.15),transparent_50%)]" />
+       <div className="lg:col-span-2 flex items-center justify-center p-12 rounded-3xl bg-white border border-slate-100 shadow-xl relative overflow-hidden min-h-[500px] group">
+           {/* Abstract Background */}
+           <div className="absolute top-[-50%] right-[-10%] w-[300px] h-[300px] bg-gradient-to-br from-indigo-100 to-purple-100 rounded-full blur-[80px] opacity-60" />
+           <div className="absolute bottom-[-10%] left-[-10%] w-[400px] h-[400px] bg-gradient-to-tr from-cyan-50 to-blue-50 rounded-full blur-[100px] opacity-60" />
            
            {quote ? (
-               <div className="relative z-10 max-w-xl text-center animate-in fade-in zoom-in duration-700">
-                  <div className="text-6xl text-indigo-400 opacity-30 font-serif mb-4 leading-none">“</div>
-                  <blockquote className="text-2xl md:text-3xl font-medium text-white leading-relaxed mb-8 font-serif">
+               <div className="relative z-10 max-w-2xl text-center animate-in fade-in zoom-in duration-700 slide-in-from-bottom-4">
+                  <div className="text-8xl text-indigo-100 font-display font-black mb-6 leading-none select-none">“</div>
+                  <blockquote className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-8 font-display tracking-tight text-gradient-iridescent bg-clip-text text-transparent bg-gradient-to-br from-slate-900 to-slate-700">
                      {quote.text}
                   </blockquote>
-                  <cite className="block text-indigo-300 not-italic font-bold tracking-wide uppercase text-sm mb-12">
+                  <cite className="block text-indigo-500 font-medium tracking-widest uppercase text-xs mb-12">
                      — {quote.author}
                   </cite>
 
-                  <div className="flex justify-center gap-4">
-                     <Button onClick={copy} variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white rounded-full">
-                        <Copy className="w-4 h-4 mr-2" /> Copy
+                  <div className="flex justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
+                     <Button onClick={copy} variant="outline" className="border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 rounded-full h-12 px-6">
+                        <Copy className="w-4 h-4 mr-2" /> Copy Quote
                      </Button>
                      {navigator.share && (
-                        <Button onClick={() => navigator.share({title:'Quote', text: quote.text})} variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white rounded-full">
+                        <Button onClick={() => navigator.share({title:'Quote', text: quote.text})} variant="ghost" className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full h-12 px-6">
                            <Share2 className="w-4 h-4 mr-2" /> Share
                         </Button>
                      )}
                   </div>
                </div>
            ) : (
-               <div className="text-center text-slate-600 animate-pulse">
-                  <Quote className="w-16 h-16 mx-auto mb-4 opacity-20" />
-                  <p>Waiting for inspiration...</p>
+               <div className="text-center text-slate-300 animate-pulse">
+                  <Quote className="w-20 h-20 mx-auto mb-6 opacity-20 text-slate-900" />
+                  <p className="font-display text-xl text-slate-400 font-medium">Waiting for inspiration...</p>
                </div>
            )}
        </div>
