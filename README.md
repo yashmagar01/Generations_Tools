@@ -40,8 +40,8 @@ instant client-side processing, and a distraction-free experience.
 ### 🌐 Live Demo
 
 You can access the hosted version of the application here:
-**[View Live Demo](https://generations-tools.vercel.app)**\
-_(Replace with your actual deployment link)_
+**[View Live Demo](https://generations-tools.vercel.app/)**\
+
 
 ### 🛠️ Run Locally
 
