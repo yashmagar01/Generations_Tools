@@ -121,34 +121,33 @@ const Home = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-white pt-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 opacity-80" />
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 animate-float" />
-        <div className="absolute top-1/2 -left-24 w-72 h-72 bg-indigo-200 rounded-full blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }} />
+      {/* Hero Section with Dot Pattern */}
+      <div className="relative overflow-hidden bg-white pt-24 pb-16">
+        <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-30" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/0 via-white/50 to-white" />
         
-        <div className="container mx-auto px-4 pt-20 pb-12 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-indigo-100 shadow-sm mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 hover:shadow-md transition-shadow cursor-default">
+        <div className="container mx-auto px-4 relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-50 border border-slate-200 shadow-sm mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 hover:scale-105 transition-transform cursor-default">
             <Sparkles className="w-4 h-4 text-indigo-500" />
-            <span className="text-sm font-medium text-indigo-900">The Ultimate Developer Toolkit</span>
+            <span className="text-sm font-medium text-slate-700">The Ultimate Developer Toolkit</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-slate-900 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
-            Create. <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Generate.</span> Done.
+            Create. <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600">Generate.</span> Done.
           </h1>
           
           <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-            A privacy-first suite of powerful tools designed for developers, designers, and creators. 
-            No sign-up required. 100% Client-side.
+            Premium privacy-first tools for developers. No server. No trackers. Just code.
           </p>
 
-          <div className="max-w-md mx-auto relative animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+          <div className="max-w-xl mx-auto relative animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
             <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
             <Input 
               type="text"
-              placeholder="Search tools (e.g., 'QR Code', 'Password', 'Color')..."
-              className="pl-11 h-14 rounded-2xl shadow-xl border-gray-100 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-300 text-lg transition-all duration-300"
+              placeholder="Search tools (e.g., 'QR', 'Password', 'Color')..."
+              className="pl-11 h-14 rounded-2xl shadow-xl shadow-indigo-100/50 border-slate-200 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-400 text-lg transition-all duration-300"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -156,37 +155,47 @@ const Home = () => {
         </div>
       </div>
 
-      {/* Features / How it works */}
-      <div id="how-it-works" className="py-12 bg-white/50 backdrop-blur-sm border-b border-gray-100/50">
+      {/* Features / How it works - Compact & Stylish */}
+      <div id="how-it-works" className="py-8 bg-slate-50 border-y border-slate-100">
         <div className="container mx-auto px-4">
-           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-4">
+           <div className="flex flex-col md:flex-row justify-center gap-6 max-w-6xl mx-auto">
+              <div className="flex-1 flex items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 group-hover:scale-110 transition-transform">
                    <MousePointerClick className="w-6 h-6" />
                  </div>
-                 <h3 className="font-semibold text-lg text-slate-900 mb-2">1. Select a Tool</h3>
-                 <p className="text-slate-500 text-sm">Choose from our suite of 12+ specialized generators for code, design, and data.</p>
+                 <div className="text-left">
+                    <h3 className="font-bold text-slate-900">1. Select Tool</h3>
+                    <p className="text-slate-500 text-sm">Browse our suite of 12+ generators.</p>
+                 </div>
               </div>
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                 <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4">
+              <div className="flex-1 flex items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                 <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 group-hover:scale-110 transition-transform">
                    <Zap className="w-6 h-6" />
                  </div>
-                 <h3 className="font-semibold text-lg text-slate-900 mb-2">2. Generate Instantly</h3>
-                 <p className="text-slate-500 text-sm">Real-time processing directly in your browser. No server latency, no waiting.</p>
+                 <div className="text-left">
+                    <h3 className="font-bold text-slate-900">2. Generate</h3>
+                    <p className="text-slate-500 text-sm">Instant, client-side processing.</p>
+                 </div>
               </div>
-              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
-                 <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 mb-4">
+              <div className="flex-1 flex items-center gap-4 p-5 rounded-2xl bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 group">
+                 <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
                    <Shield className="w-6 h-6" />
                  </div>
-                 <h3 className="font-semibold text-lg text-slate-900 mb-2">3. 100% Private</h3>
-                 <p className="text-slate-500 text-sm">Data never leaves your device. Copy your results and get back to work secure.</p>
+                 <div className="text-left">
+                    <h3 className="font-bold text-slate-900">3. Private</h3>
+                    <p className="text-slate-500 text-sm">Data never leaves your browser.</p>
+                 </div>
               </div>
            </div>
         </div>
       </div>
 
       {/* Tools Grid */}
-      <div id="all-tools" className="container mx-auto px-4 py-16">
+      <div id="all-tools" className="container mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+           <h2 className="text-2xl font-bold text-slate-900 mb-2">Available Generators</h2>
+           <p className="text-slate-500">Pick a tool to get started instantly</p>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {filteredTools.map((tool, index) => (
             <Card 
