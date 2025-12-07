@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
@@ -16,9 +15,13 @@ import WouldYouRather from '@/components/tools/WouldYouRather';
 import QRCodeGenerator from '@/components/tools/QRCodeGenerator';
 
 const Tools = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
-  const [activeGenerator, setActiveGenerator] = useState(searchParams.get('active') || 'qr-code');
+  const activeGenerator = searchParams.get('active') || 'qr-code';
+
+  const setActiveGenerator = (id: string) => {
+    setSearchParams({ active: id });
+  };
 
   const generators = [
     { id: 'qr-code', name: 'QR Code', icon: '📱', gradient: 'from-orange-500 to-amber-500', component: <QRCodeGenerator /> },

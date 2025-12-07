@@ -26,6 +26,11 @@ const Navbar = () => {
 
   const handleNavigation = (href: string) => {
     setIsMobileMenuOpen(false);
+    if (href.startsWith('http')) {
+      window.open(href, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    
     if (href.startsWith('/')) {
       navigate(href);
     } else {
