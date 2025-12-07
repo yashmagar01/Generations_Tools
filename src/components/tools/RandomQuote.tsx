@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 
 interface Quote {
   text: string;
@@ -37,6 +38,7 @@ const RandomQuote = () => {
     if (quote) {
       const text = `"${quote.text}" - ${quote.author}`;
       navigator.clipboard.writeText(text);
+      toast.success("Quote copied to clipboard!");
     }
   };
 

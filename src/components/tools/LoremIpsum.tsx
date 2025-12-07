@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 const LoremIpsum = () => {
   const [text, setText] = useState('');
@@ -44,6 +45,7 @@ const LoremIpsum = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(text);
+    toast.success("Text copied to clipboard!");
   };
 
   return (

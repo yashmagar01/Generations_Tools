@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
+import { Shield, ShieldAlert, ShieldCheck, Copy, RefreshCw } from 'lucide-react';
 
 const PasswordGenerator = () => {
   const [password, setPassword] = useState('');
@@ -12,6 +13,30 @@ const PasswordGenerator = () => {
   const [includeLowercase, setIncludeLowercase] = useState(true);
   const [includeNumbers, setIncludeNumbers] = useState(true);
   const [includeSymbols, setIncludeSymbols] = useState(true);
+  const [strength, setStrength] = useState(0);
+
+  const calculateStrength = (pwd: string) => {
+    let score = 0;
+    if (pwd.length > 8) score += 1;
+    if (pwd.length > 12) score += 1;
+    if (/[A-Z]/.test(pwd)) score += 1;
+    if (/[a-z]/.test(pwd)) score += 1;
+    if (/[0-9]/.test(pwd)) score += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) score += 1;
+    return score;
+  };
+
+  const getStrengthColor = (score: number) => {
+    if (score <= 2) return 'bg-red-500';
+    if (score <= 4) return 'bg-yellow-500';
+    return 'bg-emerald-500';
+  };
+
+  const getStrengthLabel = (score: number) => {
+    if (score <= 2) return 'Weak';
+    if (score <= 4) return 'Strong';
+    return 'Very Strong';
+  };
 
   const generatePassword = () => {
     let charset = '';
@@ -35,7 +60,13 @@ const PasswordGenerator = () => {
       .join('');
 
     setPassword(newPassword);
+    setStrength(calculateStrength(newPassword));
   };
+  
+  // Generate on mount
+  useEffect(() => {
+     generatePassword();
+  }, []);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(password);
@@ -45,7 +76,7 @@ const PasswordGenerator = () => {
   return (
     <Card className="p-6 animate-fade-in shadow-lg hover:shadow-xl transition-shadow duration-300">
       <div className="flex items-center gap-3 mb-6">
-        <div className="text-3xl bg-green-100 p-2 rounded-lg">🔒</div>
+        <div className="text-3xl bg-emerald-100 p-2 rounded-lg">🔒</div>
         <div>
           <h2 className="text-2xl font-bold text-gray-800">Password Generator</h2>
           <p className="text-gray-600">Create cryptographically secure passwords</p>
@@ -53,6 +84,51 @@ const PasswordGenerator = () => {
       </div>
       
       <div className="space-y-6">
+        <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 relative group text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+                 {strength > 4 ? <ShieldCheck className="text-emerald-400 w-5 h-5"/> : 
+                  strength > 2 ? <Shield className="text-yellow-400 w-5 h-5"/> : 
+                  <ShieldAlert className="text-red-400 w-5 h-5"/>}
+                 <span className={`text-xs font-bold uppercase tracking-wider ${
+                    strength > 4 ? 'text-emerald-400' : strength > 2 ? 'text-yellow-400' : 'text-red-400'
+                 }`}>
+                    {getStrengthLabel(strength)}
+                 </span>
+            </div>
+            
+            <code className="text-2xl font-mono text-white break-all block mb-4 tracking-wider">
+            {password}
+            </code>
+
+            {/* Strength Bar */}
+            <div className="h-1.5 w-full bg-gray-700 rounded-full overflow-hidden max-w-xs mx-auto mb-4">
+                <div 
+                    className={`h-full transition-all duration-500 ${getStrengthColor(strength)}`} 
+                    style={{ width: `${(strength / 6) * 100}%` }}
+                />
+            </div>
+
+            <div className="flex justify-center gap-3">
+                <Button
+                    onClick={generatePassword}
+                    variant="secondary"
+                    size="sm"
+                    className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700"
+                >
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Regenerate
+                </Button>
+                <Button
+                    onClick={copyToClipboard}
+                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                    size="sm"
+                >
+                    <Copy className="w-4 h-4 mr-2" />
+                    Copy
+                </Button>
+            </div>
+        </div>
+        
         <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
           <label className="block text-sm font-medium text-gray-700 mb-4 flex justify-between">
             <span>📏 Password Length</span>
@@ -65,7 +141,7 @@ const PasswordGenerator = () => {
                 max="64"
                 value={length}
                 onChange={(e) => setLength(parseInt(e.target.value))}
-                className="w-full cursor-pointer"
+                className="w-full cursor-pointer accent-emerald-500"
              />
           </div>
         </div>
@@ -76,6 +152,7 @@ const PasswordGenerator = () => {
               id="uppercase" 
               checked={includeUppercase}
               onCheckedChange={(checked) => setIncludeUppercase(checked === true)}
+              className="data-[state=checked]:bg-emerald-500"
             />
             <label htmlFor="uppercase" className="text-sm font-medium cursor-pointer flex-1">🔤 Uppercase</label>
           </div>
@@ -85,6 +162,7 @@ const PasswordGenerator = () => {
               id="lowercase" 
               checked={includeLowercase}
               onCheckedChange={(checked) => setIncludeLowercase(checked === true)}
+              className="data-[state=checked]:bg-emerald-500"
             />
             <label htmlFor="lowercase" className="text-sm font-medium cursor-pointer flex-1">🔡 Lowercase</label>
           </div>
@@ -94,6 +172,7 @@ const PasswordGenerator = () => {
               id="numbers" 
               checked={includeNumbers}
               onCheckedChange={(checked) => setIncludeNumbers(checked === true)}
+              className="data-[state=checked]:bg-emerald-500"
             />
             <label htmlFor="numbers" className="text-sm font-medium cursor-pointer flex-1">🔢 Numbers</label>
           </div>
@@ -103,38 +182,11 @@ const PasswordGenerator = () => {
               id="symbols" 
               checked={includeSymbols}
               onCheckedChange={(checked) => setIncludeSymbols(checked === true)}
+              className="data-[state=checked]:bg-emerald-500"
             />
             <label htmlFor="symbols" className="text-sm font-medium cursor-pointer flex-1">🔣 Symbols</label>
           </div>
         </div>
-        
-        <Button 
-          onClick={generatePassword}
-          className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold py-4 rounded-xl shadow-md transition-all duration-200 transform hover:-translate-y-1"
-        >
-          Generate Secure Password
-        </Button>
-        
-        {password && (
-          <div className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 relative group text-center">
-              <code className="text-xl font-mono text-emerald-400 break-all block mb-2">
-                {password}
-              </code>
-              <Button
-                  onClick={copyToClipboard}
-                  variant="secondary"
-                  size="sm"
-                  className="mt-4 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                  Copy Password
-                </Button>
-            </div>
-            <p className="text-xs text-center text-gray-500 mt-3 flex items-center justify-center gap-1">
-              🔐 Generated locally on your device
-            </p>
-          </div>
-        )}
       </div>
     </Card>
   );

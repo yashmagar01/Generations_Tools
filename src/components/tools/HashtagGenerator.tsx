@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 const HashtagGenerator = () => {
   const [keyword, setKeyword] = useState('');
@@ -29,6 +30,7 @@ const HashtagGenerator = () => {
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(hashtags.join(' '));
+    toast.success("Hashtags copied to clipboard!");
   };
 
   return (
