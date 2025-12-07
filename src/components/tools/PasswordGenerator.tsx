@@ -4,15 +4,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Shield, ShieldAlert, ShieldCheck, Copy, RefreshCw } from 'lucide-react';
+import { Shield, Copy, RefreshCw, Sliders, CheckCircle2 } from 'lucide-react';
 
 const PasswordGenerator = () => {
   const [password, setPassword] = useState('');
   const [length, setLength] = useState(16);
-  const [includeUppercase, setIncludeUppercase] = useState(true);
-  const [includeLowercase, setIncludeLowercase] = useState(true);
-  const [includeNumbers, setIncludeNumbers] = useState(true);
-  const [includeSymbols, setIncludeSymbols] = useState(true);
+  const [options, setOptions] = useState({
+     uppercase: true,
+     lowercase: true,
+     numbers: true,
+     symbols: true
+  });
   const [strength, setStrength] = useState(0);
 
   const calculateStrength = (pwd: string) => {
@@ -26,28 +28,16 @@ const PasswordGenerator = () => {
     return score;
   };
 
-  const getStrengthColor = (score: number) => {
-    if (score <= 2) return 'bg-red-500';
-    if (score <= 4) return 'bg-yellow-500';
-    return 'bg-emerald-500';
-  };
-
-  const getStrengthLabel = (score: number) => {
-    if (score <= 2) return 'Weak';
-    if (score <= 4) return 'Strong';
-    return 'Very Strong';
-  };
-
   const generatePassword = () => {
     let charset = '';
-    if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
-    if (includeNumbers) charset += '0123456789';
-    if (includeSymbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
+    if (options.uppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    if (options.lowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+    if (options.numbers) charset += '0123456789';
+    if (options.symbols) charset += '!@#$%^&*()_+-=[]{}|;:,.<>?';
     
     if (charset === '') {
-      toast.error('Please select at least one character type');
-      return;
+       // fallback
+       return;
     }
     
     const newPassword = Array(length)
@@ -63,132 +53,113 @@ const PasswordGenerator = () => {
     setStrength(calculateStrength(newPassword));
   };
   
-  // Generate on mount and when settings change
   useEffect(() => {
      generatePassword();
-  }, [length, includeUppercase, includeLowercase, includeNumbers, includeSymbols]);
+  }, [length, options]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(password);
-    toast.success("Password copied to clipboard!");
+    toast.success("Password copied!");
+  };
+
+  const toggleOption = (key: keyof typeof options) => {
+      setOptions(prev => {
+          const newState = { ...prev, [key]: !prev[key] };
+          // Prevent unchecking all
+          if (!Object.values(newState).some(Boolean)) return prev;
+          return newState;
+      });
   };
 
   return (
-    <Card className="p-6 animate-fade-in shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="text-3xl bg-emerald-100 p-2 rounded-lg">🔒</div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Password Generator</h2>
-          <p className="text-gray-600">Create cryptographically secure passwords</p>
-        </div>
-      </div>
-      
-      <div className="space-y-6">
-        <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 relative group text-center">
-            <div className="flex items-center justify-center gap-2 mb-2">
-                 {strength > 4 ? <ShieldCheck className="text-emerald-400 w-5 h-5"/> : 
-                  strength > 2 ? <Shield className="text-yellow-400 w-5 h-5"/> : 
-                  <ShieldAlert className="text-red-400 w-5 h-5"/>}
-                 <span className={`text-xs font-bold uppercase tracking-wider ${
-                    strength > 4 ? 'text-emerald-400' : strength > 2 ? 'text-yellow-400' : 'text-red-400'
-                 }`}>
-                    {getStrengthLabel(strength)}
-                 </span>
-            </div>
-            
-            <code className="text-2xl font-mono text-white break-all block mb-4 tracking-wider">
-            {password}
-            </code>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+       {/* Controls */}
+       <Card className="lg:col-span-1 glass-card p-6 flex flex-col gap-6 h-fit">
+          <div className="flex items-center justify-between">
+              <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <Sliders className="w-5 h-5 text-emerald-500" />
+                Settings
+              </h2>
+              <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-500">{length} chars</span>
+          </div>
 
-            {/* Strength Bar */}
-            <div className="h-1.5 w-full bg-gray-700 rounded-full overflow-hidden max-w-xs mx-auto mb-4">
-                <div 
-                    className={`h-full transition-all duration-500 ${getStrengthColor(strength)}`} 
-                    style={{ width: `${(strength / 6) * 100}%` }}
-                />
-            </div>
+          <div className="space-y-6">
+              <div className="space-y-3">
+                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Length</label>
+                 <Input 
+                    type="range" 
+                    min="8" 
+                    max="64" 
+                    value={length} 
+                    onChange={(e) => setLength(parseInt(e.target.value))}
+                    className="cursor-pointer accent-emerald-500 h-2 bg-slate-100 rounded-lg appearance-none"
+                 />
+              </div>
 
-            <div className="flex justify-center gap-3">
-                <Button
-                    onClick={generatePassword}
-                    variant="secondary"
-                    size="sm"
-                    className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Regenerate
-                </Button>
-                <Button
-                    onClick={copyToClipboard}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                    size="sm"
-                >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy
-                </Button>
-            </div>
-        </div>
-        
-        <div className="bg-gray-50 p-6 rounded-xl border border-gray-100">
-          <label className="block text-sm font-medium text-gray-700 mb-4 flex justify-between">
-            <span>📏 Password Length</span>
-            <span className="bg-white px-2 py-0.5 rounded border text-sm font-mono">{length}</span>
-          </label>
-          <div className="flex items-center gap-4">
-             <Input
-                type="range"
-                min="8"
-                max="64"
-                value={length}
-                onChange={(e) => setLength(parseInt(e.target.value))}
-                className="w-full cursor-pointer accent-emerald-500"
-             />
+              <div className="space-y-3">
+                 <label className="text-xs font-bold uppercase tracking-wider text-slate-400">Include</label>
+                 <div className="grid grid-cols-2 gap-3">
+                    {Object.entries(options).map(([key, value]) => (
+                        <div 
+                          key={key}
+                          onClick={() => toggleOption(key as any)}
+                          className={`cursor-pointer p-3 rounded-xl border flex items-center gap-2 transition-all ${
+                              value ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-slate-200 text-slate-500 hover:bg-slate-50'
+                          }`}
+                        >
+                           <div className={`w-4 h-4 rounded-full flex items-center justify-center border ${value ? 'bg-emerald-500 border-emerald-500' : 'border-slate-300'}`}>
+                              {value && <CheckCircle2 className="w-3 h-3 text-white" />}
+                           </div>
+                           <span className="capitalize text-sm font-medium">{key}</span>
+                        </div>
+                    ))}
+                 </div>
+              </div>
           </div>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-            <Checkbox 
-              id="uppercase" 
-              checked={includeUppercase}
-              onCheckedChange={(checked) => setIncludeUppercase(checked === true)}
-              className="data-[state=checked]:bg-emerald-500"
-            />
-            <label htmlFor="uppercase" className="text-sm font-medium cursor-pointer flex-1">🔤 Uppercase</label>
-          </div>
-          
-          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-            <Checkbox 
-              id="lowercase" 
-              checked={includeLowercase}
-              onCheckedChange={(checked) => setIncludeLowercase(checked === true)}
-              className="data-[state=checked]:bg-emerald-500"
-            />
-            <label htmlFor="lowercase" className="text-sm font-medium cursor-pointer flex-1">🔡 Lowercase</label>
-          </div>
-          
-          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-            <Checkbox 
-              id="numbers" 
-              checked={includeNumbers}
-              onCheckedChange={(checked) => setIncludeNumbers(checked === true)}
-              className="data-[state=checked]:bg-emerald-500"
-            />
-            <label htmlFor="numbers" className="text-sm font-medium cursor-pointer flex-1">🔢 Numbers</label>
-          </div>
-          
-          <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-            <Checkbox 
-              id="symbols" 
-              checked={includeSymbols}
-              onCheckedChange={(checked) => setIncludeSymbols(checked === true)}
-              className="data-[state=checked]:bg-emerald-500"
-            />
-            <label htmlFor="symbols" className="text-sm font-medium cursor-pointer flex-1">🔣 Symbols</label>
-          </div>
-        </div>
-      </div>
-    </Card>
+
+          <Button onClick={generatePassword} variant="outline" className="w-full mt-2 border-emerald-200 text-emerald-700 hover:bg-emerald-50">
+             <RefreshCw className="w-4 h-4 mr-2" /> Regenerate
+          </Button>
+       </Card>
+
+       {/* Results */}
+       <div className="lg:col-span-2 flex flex-col items-center justify-center p-8 rounded-3xl bg-slate-900 shadow-2xl relative overflow-hidden text-center min-h-[400px]">
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.1)_0%,transparent_70%)]" />
+           
+           <div className="relative z-10 w-full max-w-xl space-y-8 animate-in-up">
+               <div className="space-y-2">
+                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700">
+                      <Shield className={`w-4 h-4 ${strength > 4 ? 'text-emerald-400' : 'text-yellow-400'}`} />
+                      <span className={`text-xs font-bold uppercase ${strength > 4 ? 'text-emerald-400' : 'text-yellow-400'}`}>
+                          {strength > 4 ? 'Cryptographically Secure' : 'Improving Strength...'}
+                      </span>
+                   </div>
+               </div>
+
+               <div onClick={copyToClipboard} className="group cursor-pointer relative break-all">
+                   <h1 className="text-4xl md:text-5xl font-mono font-bold text-white tracking-wider group-hover:text-emerald-200 transition-colors">
+                      {password}
+                   </h1>
+                   <div className="absolute -right-8 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Copy className="w-6 h-6 text-white" />
+                   </div>
+               </div>
+
+               <div className="h-1.5 w-64 mx-auto bg-slate-800 rounded-full overflow-hidden">
+                  <div 
+                      className={`h-full transition-all duration-700 ease-out ${strength > 4 ? 'bg-emerald-500 shadow-[0_0_10px_#10b981]' : strength > 2 ? 'bg-yellow-500' : 'bg-red-500'}`} 
+                      style={{ width: `${(strength / 6) * 100}%` }}
+                  />
+               </div>
+
+               <div className="pt-8">
+                  <Button onClick={copyToClipboard} size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-8 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-transform">
+                     Copy Password
+                  </Button>
+               </div>
+           </div>
+       </div>
+    </div>
   );
 };
 
