@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search, Sparkles, ArrowRight } from 'lucide-react';
 
 const Home = () => {
   const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState('');
 
   const tools = [
     { 
@@ -12,168 +15,216 @@ const Home = () => {
       name: 'QR Code', 
       icon: '📱', 
       description: 'Generate QR codes instantly',
-      gradient: 'from-orange-500 to-amber-500'
+      gradient: 'from-orange-500 to-amber-500',
+      category: 'Utility'
     },
     { 
       id: 'color-palette', 
       name: 'Color Palette', 
       icon: '🎨', 
       description: 'Generate beautiful color schemes',
-      gradient: 'from-slate-600 to-gray-700'
-    },
-    { 
-      id: 'lorem-ipsum', 
-      name: 'Lorem Ipsum', 
-      icon: '📝', 
-      description: 'Generate placeholder text',
-      gradient: 'from-blue-500 to-cyan-500'
-    },
-    { 
-      id: 'random-number', 
-      name: 'Random Number', 
-      icon: '🎲', 
-      description: 'Generate random numbers',
-      gradient: 'from-purple-500 to-indigo-500'
+      gradient: 'from-slate-600 to-gray-700',
+      category: 'Design'
     },
     { 
       id: 'password', 
       name: 'Password', 
       icon: '🔒', 
       description: 'Create secure passwords',
-      gradient: 'from-green-500 to-emerald-500'
+      gradient: 'from-green-500 to-emerald-500',
+      category: 'Security'
+    },
+    { 
+      id: 'random-number', 
+      name: 'Random Number', 
+      icon: '🎲', 
+      description: 'Generate random numbers',
+      gradient: 'from-purple-500 to-indigo-500',
+      category: 'Utility'
+    },
+    { 
+      id: 'lorem-ipsum', 
+      name: 'Lorem Ipsum', 
+      icon: '📝', 
+      description: 'Generate placeholder text',
+      gradient: 'from-blue-500 to-cyan-500',
+      category: 'Design'
     },
     { 
       id: 'css-gradient', 
       name: 'CSS Gradient', 
       icon: '🌈', 
       description: 'Create CSS gradients',
-      gradient: 'from-violet-500 to-purple-500'
+      gradient: 'from-violet-500 to-purple-500',
+      category: 'Design'
     },
     { 
       id: 'profile', 
       name: 'Profile', 
       icon: '👤', 
       description: 'Generate dummy profiles',
-      gradient: 'from-teal-500 to-cyan-500'
+      gradient: 'from-teal-500 to-cyan-500',
+      category: 'Data'
     },
     { 
       id: 'placeholder', 
       name: 'Placeholder Image', 
       icon: '🖼️', 
       description: 'Generate placeholder images',
-      gradient: 'from-red-500 to-pink-500'
+      gradient: 'from-red-500 to-pink-500',
+      category: 'Design'
     },
     { 
       id: 'unique-id', 
       name: 'Unique ID', 
       icon: '🆔', 
       description: 'Generate unique identifiers',
-      gradient: 'from-slate-500 to-gray-500'
+      gradient: 'from-slate-500 to-gray-500',
+      category: 'Dev'
     },
     { 
       id: 'quotes', 
       name: 'Random Quote', 
       icon: '💭', 
       description: 'Get inspirational quotes',
-      gradient: 'from-indigo-500 to-blue-500'
+      gradient: 'from-indigo-500 to-blue-500',
+      category: 'Fun'
     },
     { 
       id: 'hashtags', 
       name: 'Hashtag Generator', 
       icon: '#️⃣', 
       description: 'Generate trending hashtags',
-      gradient: 'from-emerald-500 to-teal-500'
+      gradient: 'from-emerald-500 to-teal-500',
+      category: 'Social'
     },
     { 
       id: 'would-you-rather', 
       name: 'Would You Rather', 
       icon: '🤔', 
       description: 'Fun question generator',
-      gradient: 'from-yellow-500 to-orange-500'
+      gradient: 'from-yellow-500 to-orange-500',
+      category: 'Fun'
     }
   ];
 
+  const filteredTools = tools.filter(tool => 
+    tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    tool.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    tool.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-              UtilityHub
-            </h1>
-            <p className="text-xl md:text-2xl opacity-90 mb-2">
-              All in One Generator Suite
-            </p>
-            <p className="text-lg opacity-75 max-w-2xl mx-auto">
-              Your comprehensive toolkit for generators and utilities. 
-              Choose from 12 powerful tools with real-time results.
-            </p>
+    <div className="min-h-screen bg-slate-50">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-white">
+        <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 opacity-80" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 animate-float" />
+        <div className="absolute top-1/2 -left-24 w-72 h-72 bg-indigo-200 rounded-full blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }} />
+        
+        <div className="container mx-auto px-4 pt-20 pb-12 relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-indigo-100 shadow-sm mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <Sparkles className="w-4 h-4 text-indigo-500" />
+            <span className="text-sm font-medium text-indigo-900">All-in-One Generator Suite</span>
+          </div>
+          
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-slate-900 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
+            Create. <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Generate.</span> Done.
+          </h1>
+          
+          <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
+            A comprehensive suite of powerful tools designed for developers, designers, and creators. 
+            Beautifully crafted, instantly useful.
+          </p>
+
+          <div className="max-w-md mx-auto relative animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <Search className="h-5 w-5 text-gray-400" />
+            </div>
+            <Input 
+              type="text"
+              placeholder="Search for tools (e.g., 'QR Code', 'Password', 'Color')..."
+              className="pl-10 h-12 rounded-2xl shadow-lg border-gray-100 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 text-lg"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
       </div>
 
       {/* Tools Grid */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Generator Tools</h2>
-          <p className="text-gray-600">Tap any tool to get started</p>
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
-          {tools.map((tool, index) => (
+      <div className="container mx-auto px-4 py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          {filteredTools.map((tool, index) => (
             <Card 
               key={tool.id} 
-              className="relative overflow-hidden cursor-pointer transform transition-all duration-300 hover:scale-105 hover:shadow-xl border-0 animate-fade-in"
-              style={{ animationDelay: `${index * 100}ms` }}
+              className="group relative overflow-hidden cursor-pointer border-0 bg-white shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 rounded-2xl animate-in fade-in zoom-in-50 fill-mode-forwards opacity-0"
+              style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'forwards' }}
               onClick={() => navigate(`/tools?active=${tool.id}`)}
+              role="button"
+              tabIndex={0}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-10`} />
-              <div className="relative p-6 text-center">
-                <div className="text-4xl mb-3 transform transition-transform duration-300 hover:scale-110">
+              <div className={`absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+                <ArrowRight className="w-5 h-5 text-gray-400" />
+              </div>
+              
+              <div className="p-6">
+                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-2xl mb-4 shadow-inner transform group-hover:scale-110 transition-transform duration-300`}>
                   {tool.icon}
                 </div>
-                <h3 className="font-semibold text-gray-800 mb-2 text-sm">
-                  {tool.name}
-                </h3>
-                <p className="text-xs text-gray-600 leading-tight">
-                  {tool.description}
-                </p>
+                
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-bold text-lg text-slate-800 group-hover:text-indigo-600 transition-colors">
+                      {tool.name}
+                    </h3>
+                  </div>
+                  <p className="text-sm text-slate-500 font-medium">
+                    {tool.category}
+                  </p>
+                  <p className="text-sm text-slate-400 leading-relaxed pt-2">
+                    {tool.description}
+                  </p>
+                </div>
               </div>
-              <div className={`absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r ${tool.gradient}`} />
+              
+              <div className="absolute inset-0 border-2 border-transparent group-hover:border-indigo-50/50 rounded-2xl pointer-events-none transition-all duration-300" />
             </Card>
           ))}
+          
+          {filteredTools.length === 0 && (
+            <div className="col-span-full text-center py-12 text-gray-500">
+              <div className="text-4xl mb-4">🔍</div>
+              <p className="text-lg">No tools found matching "{searchTerm}"</p>
+              <Button 
+                variant="link" 
+                onClick={() => setSearchTerm('')}
+                className="mt-2 text-indigo-600"
+              >
+                Clear search
+              </Button>
+            </div>
+          )}
         </div>
+      </div>
 
-        {/* Stats Section */}
-        <div className="mt-12 bg-white rounded-2xl shadow-lg p-8 max-w-4xl mx-auto">
-          <div className="grid grid-cols-3 gap-8 text-center">
-            <div className="animate-fade-in" style={{ animationDelay: '600ms' }}>
-              <div className="text-3xl font-bold text-indigo-600">12</div>
-              <div className="text-sm text-gray-600">Powerful Tools</div>
+      {/* Footer Stats - Minimalist */}
+      <div className="bg-white border-t border-gray-100 py-12 mt-12">
+        <div className="max-w-4xl mx-auto px-4">
+          <div className="grid grid-cols-3 gap-8 text-center divide-x divide-gray-100">
+            <div>
+              <div className="text-2xl font-bold text-slate-900">12+</div>
+              <div className="text-sm text-slate-500 mt-1">Free Tools</div>
             </div>
-            <div className="animate-fade-in" style={{ animationDelay: '700ms' }}>
-              <div className="text-3xl font-bold text-purple-600">∞</div>
-              <div className="text-sm text-gray-600">Generations</div>
+            <div>
+              <div className="text-2xl font-bold text-slate-900">100%</div>
+              <div className="text-sm text-slate-500 mt-1">Client-Side</div>
             </div>
-            <div className="animate-fade-in" style={{ animationDelay: '800ms' }}>
-              <div className="text-3xl font-bold text-pink-600">⚡</div>
-              <div className="text-sm text-gray-600">Lightning Fast</div>
+            <div>
+              <div className="text-2xl font-bold text-slate-900">∞</div>
+              <div className="text-sm text-slate-500 mt-1">Possibilities</div>
             </div>
           </div>
-        </div>
-
-        {/* Get Started Section */}
-        <div className="text-center mt-12 animate-fade-in" style={{ animationDelay: '900ms' }}>
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">
-            Ready to boost your productivity?
-          </h3>
-          <Button 
-            onClick={() => navigate('/tools')}
-            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white px-8 py-3 rounded-full text-lg font-medium transform transition-all duration-300 hover:scale-105 shadow-lg"
-          >
-            Start Creating →
-          </Button>
         </div>
       </div>
     </div>
