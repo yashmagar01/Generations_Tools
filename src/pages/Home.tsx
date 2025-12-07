@@ -11,6 +11,8 @@ const Home = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
 
+  // Define tools for the grid layout
+
   const tools = [
     { 
       id: 'qr-code', 
