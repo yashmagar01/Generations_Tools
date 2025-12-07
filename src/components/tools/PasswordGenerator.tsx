@@ -63,10 +63,10 @@ const PasswordGenerator = () => {
     setStrength(calculateStrength(newPassword));
   };
   
-  // Generate on mount
+  // Generate on mount and when settings change
   useEffect(() => {
      generatePassword();
-  }, []);
+  }, [length, includeUppercase, includeLowercase, includeNumbers, includeSymbols]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(password);

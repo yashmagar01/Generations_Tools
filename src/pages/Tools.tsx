@@ -48,7 +48,7 @@ const Tools = () => {
           <span className="font-bold text-xl text-slate-800">UtilityHub</span>
         </div>
         
-        <div className="flex-1 overflow-y-auto p-4 space-y-1 no-scrollbar">
+        <div className="flex-1 overflow-y-auto p-4 space-y-1 sidebar-scroll">
           <div className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-4 px-2">Tools</div>
           {generators.map((gen) => (
             <button
