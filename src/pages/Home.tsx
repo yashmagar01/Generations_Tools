@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Sparkles, ArrowRight } from 'lucide-react';
+import { Search, Sparkles, ArrowRight, Zap, Shield, MousePointerClick } from 'lucide-react';
+import Navbar from '@/components/layout/Navbar';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -115,17 +116,19 @@ const Home = () => {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-indigo-100 selection:text-indigo-900">
+      <Navbar />
+      
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-white">
+      <div className="relative overflow-hidden bg-white pt-20">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-purple-50 opacity-80" />
         <div className="absolute -top-24 -right-24 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20 animate-float" />
         <div className="absolute top-1/2 -left-24 w-72 h-72 bg-indigo-200 rounded-full blur-3xl opacity-20 animate-float" style={{ animationDelay: '2s' }} />
         
         <div className="container mx-auto px-4 pt-20 pb-12 relative z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-indigo-100 shadow-sm mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-indigo-100 shadow-sm mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700 hover:shadow-md transition-shadow cursor-default">
             <Sparkles className="w-4 h-4 text-indigo-500" />
-            <span className="text-sm font-medium text-indigo-900">All-in-One Generator Suite</span>
+            <span className="text-sm font-medium text-indigo-900">The Ultimate Developer Toolkit</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-bold mb-6 tracking-tight text-slate-900 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-100">
@@ -133,18 +136,18 @@ const Home = () => {
           </h1>
           
           <p className="text-xl text-slate-500 max-w-2xl mx-auto mb-10 leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
-            A comprehensive suite of powerful tools designed for developers, designers, and creators. 
-            Beautifully crafted, instantly useful.
+            A privacy-first suite of powerful tools designed for developers, designers, and creators. 
+            No sign-up required. 100% Client-side.
           </p>
 
           <div className="max-w-md mx-auto relative animate-in fade-in slide-in-from-bottom-10 duration-700 delay-300">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-gray-400" />
             </div>
             <Input 
               type="text"
-              placeholder="Search for tools (e.g., 'QR Code', 'Password', 'Color')..."
-              className="pl-10 h-12 rounded-2xl shadow-lg border-gray-100 focus:ring-2 focus:ring-indigo-100 focus:border-indigo-300 text-lg"
+              placeholder="Search tools (e.g., 'QR Code', 'Password', 'Color')..."
+              className="pl-11 h-14 rounded-2xl shadow-xl border-gray-100 focus:ring-4 focus:ring-indigo-100 focus:border-indigo-300 text-lg transition-all duration-300"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -152,8 +155,37 @@ const Home = () => {
         </div>
       </div>
 
+      {/* Features / How it works */}
+      <div id="how-it-works" className="py-12 bg-white/50 backdrop-blur-sm border-b border-gray-100/50">
+        <div className="container mx-auto px-4">
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                 <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 mb-4">
+                   <MousePointerClick className="w-6 h-6" />
+                 </div>
+                 <h3 className="font-semibold text-lg text-slate-900 mb-2">1. Select a Tool</h3>
+                 <p className="text-slate-500 text-sm">Choose from our suite of 12+ specialized generators for code, design, and data.</p>
+              </div>
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                 <div className="w-12 h-12 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600 mb-4">
+                   <Zap className="w-6 h-6" />
+                 </div>
+                 <h3 className="font-semibold text-lg text-slate-900 mb-2">2. Generate Instantly</h3>
+                 <p className="text-slate-500 text-sm">Real-time processing directly in your browser. No server latency, no waiting.</p>
+              </div>
+              <div className="flex flex-col items-center text-center p-6 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300">
+                 <div className="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600 mb-4">
+                   <Shield className="w-6 h-6" />
+                 </div>
+                 <h3 className="font-semibold text-lg text-slate-900 mb-2">3. 100% Private</h3>
+                 <p className="text-slate-500 text-sm">Data never leaves your device. Copy your results and get back to work secure.</p>
+              </div>
+           </div>
+        </div>
+      </div>
+
       {/* Tools Grid */}
-      <div className="container mx-auto px-4 py-16">
+      <div id="all-tools" className="container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {filteredTools.map((tool, index) => (
             <Card 
