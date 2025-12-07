@@ -1,8 +1,33 @@
-import { Github, Twitter, Heart, Linkedin, Send } from 'lucide-react';
+import { useState } from 'react';
+import { Github, Twitter, Heart, Linkedin, Send, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!email || !email.includes('@')) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Simulate API call
+    setTimeout(() => {
+      setIsLoading(false);
+      setEmail('');
+      toast.success('Subscribed!', {
+        description: 'You have been added to our newsletter.',
+      });
+    }, 1500);
+  };
+
   return (
     <footer className="bg-slate-50 border-t border-slate-200 pt-16 pb-8">
       <div className="container mx-auto px-4">
@@ -63,12 +88,18 @@ const Footer = () => {
              <p className="text-sm text-slate-500 mb-4">
                 Get the latest tools and features sent to your inbox.
              </p>
-             <div className="flex gap-2">
-                <Input placeholder="Enter your email" className="bg-white" />
-                <Button size="icon" className="bg-slate-900 hover:bg-slate-800">
-                   <Send className="w-4 h-4" />
+             <form onSubmit={handleSubscribe} className="flex gap-2">
+                <Input 
+                  placeholder="Enter your email" 
+                  className="bg-white" 
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                />
+                <Button type="submit" size="icon" className="bg-slate-900 hover:bg-slate-800" disabled={isLoading}>
+                   {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                 </Button>
-             </div>
+             </form>
           </div>
         </div>
 
