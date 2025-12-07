@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Search, Sparkles, ArrowRight, Zap, Shield, MousePointerClick } from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -190,37 +191,36 @@ const Home = () => {
           {filteredTools.map((tool, index) => (
             <Card 
               key={tool.id} 
-              className="group relative overflow-hidden cursor-pointer border-0 bg-white shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 rounded-2xl animate-in fade-in zoom-in-50 fill-mode-forwards opacity-0"
+              className="group relative overflow-hidden cursor-pointer border-0 bg-white shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 rounded-2xl animate-in fade-in zoom-in-50 fill-mode-forwards opacity-0 z-0"
               style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'forwards' }}
               onClick={() => navigate(`/tools?active=${tool.id}`)}
               role="button"
               tabIndex={0}
             >
-              <div className={`absolute top-0 right-0 p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
-                <ArrowRight className="w-5 h-5 text-gray-400" />
-              </div>
+              <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
               
               <div className="p-6">
-                 <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-2xl mb-4 shadow-inner transform group-hover:scale-110 transition-transform duration-300`}>
-                  {tool.icon}
-                </div>
-                
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-bold text-lg text-slate-800 group-hover:text-indigo-600 transition-colors">
-                      {tool.name}
-                    </h3>
+                 <div className="flex items-start justify-between mb-4">
+                  <span className="text-4xl group-hover:scale-110 transition-transform duration-300 block">{tool.icon}</span>
+                  <div className={`p-2 rounded-lg bg-gradient-to-r ${tool.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+                    <ArrowRight className="w-4 h-4 text-white" />
                   </div>
-                  <p className="text-sm text-slate-500 font-medium">
-                    {tool.category}
-                  </p>
-                  <p className="text-sm text-slate-400 leading-relaxed pt-2">
-                    {tool.description}
-                  </p>
-                </div>
+                 </div>
+
+                 <div className="space-y-2">
+                   <div className="flex items-center gap-2">
+                      <span className="text-xs font-semibold px-2 py-1 rounded-full bg-slate-100 text-slate-600 group-hover:bg-slate-200 transition-colors">
+                        {tool.category}
+                      </span>
+                   </div>
+                   <h3 className="font-bold text-lg text-slate-800 group-hover:text-indigo-600 transition-colors">
+                      {tool.name}
+                   </h3>
+                   <p className="text-sm text-slate-500 line-clamp-2">
+                      {tool.description}
+                   </p>
+                 </div>
               </div>
-              
-              <div className="absolute inset-0 border-2 border-transparent group-hover:border-indigo-50/50 rounded-2xl pointer-events-none transition-all duration-300" />
             </Card>
           ))}
           
@@ -239,26 +239,8 @@ const Home = () => {
           )}
         </div>
       </div>
-
-      {/* Footer Stats - Minimalist */}
-      <div className="bg-white border-t border-gray-100 py-12 mt-12">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="grid grid-cols-3 gap-8 text-center divide-x divide-gray-100">
-            <div>
-              <div className="text-2xl font-bold text-slate-900">12+</div>
-              <div className="text-sm text-slate-500 mt-1">Free Tools</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-slate-900">100%</div>
-              <div className="text-sm text-slate-500 mt-1">Client-Side</div>
-            </div>
-            <div>
-              <div className="text-2xl font-bold text-slate-900">∞</div>
-              <div className="text-sm text-slate-500 mt-1">Possibilities</div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
+      <Footer />
     </div>
   );
 };
