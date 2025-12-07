@@ -1,166 +1,319 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Search, Sparkles, ArrowRight, Zap, Shield, MousePointerClick, Command } from 'lucide-react';
+import { 
+  ArrowRight, 
+  Sparkles, 
+  QrCode, 
+  Palette, 
+  Lock, 
+  Dices, 
+  FileText, 
+  Paintbrush, 
+  User, 
+  Image as ImageIcon, 
+  Fingerprint, 
+  Quote, 
+  Hash, 
+  Split,
+  Zap,
+  Shield,
+  MousePointerClick,
+  CheckCircle2
+} from 'lucide-react';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  // Holographic spotlight effect
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (containerRef.current) {
-         const rect = containerRef.current.getBoundingClientRect();
-         setMousePosition({
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top,
-         });
-      }
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  const [activeCategory, setActiveCategory] = useState('All');
 
   const tools = [
-    { id: 'qr-code', name: 'QR Code', icon: '📱', description: 'Generate QR codes instantly', gradient: 'from-orange-500 to-amber-500', category: 'Utility' },
-    { id: 'color-palette', name: 'Color Palette', icon: '🎨', description: 'Generate beautiful color schemes', gradient: 'from-slate-600 to-gray-700', category: 'Design' },
-    { id: 'password', name: 'Password', icon: '🔒', description: 'Create secure passwords', gradient: 'from-green-500 to-emerald-500', category: 'Security' },
-    { id: 'random-number', name: 'Random Number', icon: '🎲', description: 'Generate random numbers', gradient: 'from-purple-500 to-indigo-500', category: 'Utility' },
-    { id: 'lorem-ipsum', name: 'Lorem Ipsum', icon: '📝', description: 'Generate placeholder text', gradient: 'from-blue-500 to-cyan-500', category: 'Design' },
-    { id: 'css-gradient', name: 'CSS Gradient', icon: '🌈', description: 'Create CSS gradients', gradient: 'from-violet-500 to-purple-500', category: 'Design' },
-    { id: 'profile', name: 'Profile', icon: '👤', description: 'Generate dummy profiles', gradient: 'from-teal-500 to-cyan-500', category: 'Data' },
-    { id: 'placeholder', name: 'Placeholder Image', icon: '🖼️', description: 'Generate placeholder images', gradient: 'from-red-500 to-pink-500', category: 'Design' },
-    { id: 'unique-id', name: 'Unique ID', icon: '🆔', description: 'Generate unique identifiers', gradient: 'from-slate-500 to-gray-500', category: 'Dev' },
-    { id: 'quotes', name: 'Random Quote', icon: '💭', description: 'Get inspirational quotes', gradient: 'from-indigo-500 to-blue-500', category: 'Fun' },
-    { id: 'hashtags', name: 'Hashtag Generator', icon: '#️⃣', description: 'Generate trending hashtags', gradient: 'from-emerald-500 to-teal-500', category: 'Social' },
-    { id: 'would-you-rather', name: 'Would You Rather', icon: '🤔', description: 'Fun question generator', gradient: 'from-yellow-500 to-orange-500', category: 'Fun' }
+    { 
+      id: 'qr-code', 
+      name: 'QR Code', 
+      icon: QrCode, 
+      description: 'Generate customizable QR codes instantly.', 
+      gradient: 'from-indigo-500 to-purple-500', 
+      category: 'Utility' 
+    },
+    { 
+      id: 'color-palette', 
+      name: 'Color Palette', 
+      icon: Palette, 
+      description: 'Create harmonious color schemes for web.', 
+      gradient: 'from-pink-500 to-rose-500', 
+      category: 'Design' 
+    },
+    { 
+      id: 'password', 
+      name: 'Password Gen', 
+      icon: Lock, 
+      description: 'Generate cryptographically secure passwords.', 
+      gradient: 'from-emerald-500 to-teal-500', 
+      category: 'Security' 
+    },
+    { 
+      id: 'random-number', 
+      name: 'Random Number', 
+      icon: Dices, 
+      description: 'Pick random numbers or roll dice.', 
+      gradient: 'from-amber-400 to-orange-500', 
+      category: 'Utility' 
+    },
+    { 
+      id: 'lorem-ipsum', 
+      name: 'Lorem Ipsum', 
+      icon: FileText, 
+      description: 'Generate placeholder text for layouts.', 
+      gradient: 'from-blue-500 to-cyan-500', 
+      category: 'Design' 
+    },
+    { 
+      id: 'css-gradient', 
+      name: 'CSS Gradient', 
+      icon: Paintbrush, 
+      description: 'Create linear and radial gradients.', 
+      gradient: 'from-violet-500 to-fuchsia-500', 
+      category: 'Design' 
+    },
+    { 
+      id: 'profile', 
+      name: 'Profile Gen', 
+      icon: User, 
+      description: 'Create realistic dummy user profiles.', 
+      gradient: 'from-cyan-500 to-blue-600', 
+      category: 'Data' 
+    },
+    { 
+      id: 'placeholder', 
+      name: 'Placeholder', 
+      icon: ImageIcon, 
+      description: 'Generate dummy images with dimensions.', 
+      gradient: 'from-red-500 to-pink-600', 
+      category: 'Design' 
+    },
+    { 
+      id: 'unique-id', 
+      name: 'Unique ID', 
+      icon: Fingerprint, 
+      description: 'Generate UUIDs, NanoIDs, and CUIDs.', 
+      gradient: 'from-slate-500 to-gray-600', 
+      category: 'Dev' 
+    },
+    { 
+      id: 'quotes', 
+      name: 'Random Quote', 
+      icon: Quote, 
+      description: 'Get inspired with random quotes.', 
+      gradient: 'from-indigo-400 to-purple-500', 
+      category: 'Fun' 
+    },
+    { 
+      id: 'hashtags', 
+      name: 'Hashtags', 
+      icon: Hash, 
+      description: 'Generate trending hashtags for social.', 
+      gradient: 'from-fuchsia-500 to-pink-500', 
+      category: 'Social' 
+    },
+    { 
+      id: 'would-you-rather', 
+      name: 'Would You Rather', 
+      icon: Split, 
+      description: 'Generate fun social questions.', 
+      gradient: 'from-lime-500 to-green-500', 
+      category: 'Fun' 
+    }
   ];
 
-  const filteredTools = tools.filter(tool => 
-    tool.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tool.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    tool.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const categories = ['All', 'Utility', 'Design', 'Security', 'Dev', 'Data', 'Fun'];
+  
+  const filteredTools = activeCategory === 'All' 
+    ? tools 
+    : tools.filter(t => t.category === activeCategory);
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-[#FAFAFA] font-sans overflow-x-hidden selection:bg-violet-100 selection:text-violet-900">
+    <div className="min-h-screen bg-slate-50 font-sans selection:bg-purple-100 selection:text-purple-900 overflow-x-hidden">
       <Navbar />
-      
-      {/* --- 3D Perspective Hero --- */}
-      <div className="relative pt-32 pb-20 perspective-container">
-         {/* 3D Grid Floor */}
-         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [transform:rotateX(60deg)_scale(2.5)] origin-top opacity-60" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#FAFAFA] via-transparent to-[#FAFAFA]" />
-         </div>
 
-         <div className="container mx-auto px-4 relative z-10 text-center">
-             {/* Badge */}
-             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.05)] mb-8 animate-in-up">
-                 <span className="relative flex h-2 w-2">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-violet-400 opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-2 w-2 bg-violet-500"></span>
-                 </span>
-                 <span className="text-xs font-semibold text-slate-600 tracking-wide uppercase">Generations V2.0</span>
-             </div>
-             
-             {/* Headline */}
-             <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-slate-900 mb-6 animate-in-up delay-100">
-                The <span className="text-gradient">Power</span> To<br/>
-                Create.
-             </h1>
-             
-             <p className="text-xl md:text-2xl text-slate-500 max-w-2xl mx-auto mb-12 font-light leading-relaxed animate-in-up delay-200">
-                A premium suite of dev tools. No backend. No limits. <br />
-                <span className="text-slate-900 font-medium">Just pure utility.</span>
-             </p>
+      {/* --- HERO SECTION --- */}
+      <div className="relative pt-32 pb-20 lg:pt-40 lg:pb-32 overflow-hidden">
+        {/* Background Orbs */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] orb orb-purple opacity-30 translate-x-1/3 -translate-y-1/4" />
+        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] orb orb-cyan opacity-20 -translate-x-1/3 translate-y-1/4" />
+        
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left Content */}
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 shadow-sm mb-8 animate-in slide-in-from-bottom-4 duration-700">
+                <span className="flex h-2 w-2 relative">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+                </span>
+                <span className="text-xs font-bold text-slate-700 tracking-wide uppercase">Generations V2.0</span>
+              </div>
 
-             {/* Search Bar with Glow */}
-             <div className="max-w-xl mx-auto relative group animate-in-up delay-300">
-                 <div className="absolute -inset-1 bg-gradient-to-r from-violet-500 to-fuchsia-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-1000 group-hover:duration-200" />
-                 <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                       <Search className="h-5 w-5 text-slate-400" />
-                    </div>
-                    <Input 
-                      type="text"
-                      placeholder="Search for a tool..."
-                      className="pl-12 h-14 bg-white/80 backdrop-blur-xl border-slate-200 text-lg rounded-xl shadow-lg focus:ring-2 focus:ring-violet-500/20"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                    <div className="absolute inset-y-0 right-3 flex items-center">
-                       <kbd className="hidden md:inline-flex h-6 select-none items-center gap-1 rounded border bg-slate-50 px-2 font-mono text-[10px] font-medium text-slate-500 border-slate-200">
-                          <span className="text-xs">⌘</span>K
-                       </kbd>
-                    </div>
-                 </div>
-             </div>
-         </div>
+              <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1] animate-in slide-in-from-bottom-6 duration-700 delay-100">
+                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-cyan-500">Power</span> To<br />
+                Create Anything.
+              </h1>
+
+              <p className="text-xl text-slate-500 mb-10 leading-relaxed font-medium max-w-lg animate-in slide-in-from-bottom-8 duration-700 delay-200">
+                Premium developer tools designed for speed. <br/>
+                No server. No trackers. Just pure utility.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-4 animate-in slide-in-from-bottom-10 duration-700 delay-300">
+                <Button 
+                   onClick={() => {
+                     const element = document.getElementById('all-tools');
+                     element?.scrollIntoView({ behavior: 'smooth' });
+                   }}
+                   className="h-14 px-8 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-lg font-bold shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-1 transition-all duration-300"
+                >
+                  Start Creating Now
+                </Button>
+                <Button 
+                   variant="outline"
+                   onClick={() => navigate('/tools')}
+                   className="h-14 px-8 rounded-xl border-2 border-slate-200 text-slate-600 hover:border-purple-200 hover:bg-purple-50/50 hover:text-purple-700 text-lg font-medium transition-all duration-300"
+                >
+                  View All 12 Tools
+                </Button>
+              </div>
+
+              <div className="mt-8 flex items-center gap-6 text-sm text-slate-500 font-medium animate-in slide-in-from-bottom-12 duration-700 delay-500">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                  <span>100% Free</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                   <span>Client-side Secure</span>
+                </div>
+                <div className="flex items-center gap-2">
+                   <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                   <span>No Signup</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Visual (Mockup) */}
+            <div className="relative hidden lg:block animate-in fade-in slide-in-from-right-8 duration-1000 delay-200">
+               <div className="relative z-10 bg-white rounded-2xl shadow-2xl p-6 border border-slate-100 rotate-2 hover:rotate-0 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-purple-50/50 rounded-2xl -z-10" />
+                  
+                  {/* Mock UI Header */}
+                  <div className="flex items-center gap-4 mb-6 border-b border-slate-100 pb-4">
+                     <div className="flex gap-2">
+                        <div className="w-3 h-3 rounded-full bg-red-400" />
+                        <div className="w-3 h-3 rounded-full bg-amber-400" />
+                        <div className="w-3 h-3 rounded-full bg-emerald-400" />
+                     </div>
+                     <div className="h-2 w-32 bg-slate-100 rounded-full" />
+                  </div>
+
+                  {/* Mock content representing tools */}
+                  <div className="grid grid-cols-2 gap-4">
+                      {[1,2,3,4].map(i => (
+                         <div key={i} className="bg-slate-50 rounded-xl p-4 border border-slate-100">
+                            <div className={`w-10 h-10 rounded-lg mb-3 bg-gradient-to-br ${i % 2 === 0 ? 'from-purple-100 to-indigo-100' : 'from-blue-100 to-cyan-100'}`} />
+                            <div className="h-2 w-20 bg-slate-200 rounded-full mb-2" />
+                            <div className="h-2 w-12 bg-slate-100 rounded-full" />
+                         </div>
+                      ))}
+                  </div>
+               </div>
+
+               {/* Decorative elements behind */}
+               <div className="absolute -top-10 -right-10 w-full h-full bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl opacity-10 -z-10 rotate-6" />
+            </div>
+
+          </div>
+        </div>
       </div>
 
-      {/* --- Value Props --- */}
-      <div className="py-16 border-y border-slate-100 bg-white/50 backdrop-blur-sm">
+      {/* --- FEATURE CARDS --- */}
+      <div className="py-20 bg-white border-y border-slate-100">
          <div className="container mx-auto px-4">
-             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                 {[
-                    { icon: MousePointerClick, title: 'One Click', desc: 'Instant results, zero friction.' },
-                    { icon: Zap, title: 'Lightning Fast', desc: '100% Client-side processing.' },
-                    { icon: Shield, title: 'Secure by Default', desc: 'Your data never leaves local.' }
-                 ].map((feature, i) => (
-                    <div key={i} className="flex flex-col items-center text-center p-6 rounded-2xl hover:bg-white hover:shadow-xl hover:shadow-black/5 transition-all duration-300">
-                        <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center text-slate-900 mb-4 shadow-inner">
-                           <feature.icon className="w-6 h-6" />
-                        </div>
-                        <h3 className="font-bold text-slate-900 text-lg mb-1">{feature.title}</h3>
-                        <p className="text-slate-500 text-sm">{feature.desc}</p>
-                    </div>
-                 ))}
-             </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+               {[
+                  { icon: MousePointerClick, title: 'One Click', desc: 'Instant results with zero friction. Designed for efficiency.' },
+                  { icon: Zap, title: 'Lightning Fast', desc: '100% Client-side processing using WebAssembly.' },
+                  { icon: Shield, title: 'Secure by Default', desc: 'Your data never leaves your browser. Privacy first.' }
+               ].map((feature, i) => (
+                  <div key={i} className="group p-8 rounded-3xl bg-white border border-slate-100 hover:border-purple-100 hover:shadow-2xl hover:shadow-purple-100/50 transition-all duration-300 hover:-translate-y-2">
+                      <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-50 to-purple-50 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                         <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-purple-500/30">
+                            <feature.icon className="w-5 h-5" />
+                         </div>
+                      </div>
+                      <h3 className="text-xl font-bold text-slate-900 mb-3">{feature.title}</h3>
+                      <p className="text-slate-500 leading-relaxed">{feature.desc}</p>
+                  </div>
+               ))}
+            </div>
          </div>
       </div>
 
-      {/* --- Tools Grid --- */}
-      <div className="container mx-auto px-4 py-20">
-         <div className="flex items-end justify-between mb-12">
+      {/* --- TOOLS GRID --- */}
+      <div id="all-tools" className="container mx-auto px-4 py-24">
+         {/* Section Header */}
+         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-               <h2 className="text-3xl font-bold text-slate-900 tracking-tight">System Tools</h2>
-               <p className="text-slate-500 mt-2">Everything you need to ship faster.</p>
+               <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">
+                  System <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-purple-600">Tools</span>
+               </h2>
+               <p className="text-xl text-slate-500 font-medium">Everything you need to ship faster.</p>
             </div>
-            <div className="hidden md:block text-sm text-slate-400 font-mono">
-               {filteredTools.length} MODULES READY
+            
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-900 rounded-full text-white text-sm font-bold shadow-lg shadow-slate-900/20">
+               <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400" />
+               12 MODULES READY
             </div>
          </div>
 
+         {/* Filter Chips */}
+         <div className="flex flex-wrap gap-2 mb-12">
+            {categories.map(cat => (
+               <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${
+                     activeCategory === cat 
+                        ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/25 scale-105' 
+                        : 'bg-white text-slate-600 border border-slate-200 hover:border-purple-300 hover:text-purple-600'
+                  }`}
+               >
+                  {cat}
+               </button>
+            ))}
+         </div>
+
+         {/* Grid */}
          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredTools.map((tool, index) => (
+            {filteredTools.map((tool) => (
                <div 
                   key={tool.id}
                   onClick={() => navigate(`/tools?active=${tool.id}`)}
-                  className="group relative bg-white border border-slate-200 rounded-3xl p-6 cursor-pointer overflow-hidden hover:shadow-2xl hover:shadow-violet-500/10 transition-all duration-500 hover:-translate-y-1 animate-in-up"
-                  style={{ animationDelay: `${index * 50}ms` }}
+                  className="group relative bg-white border border-slate-200 rounded-2xl p-6 cursor-pointer hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/10 transition-all duration-300 hover:-translate-y-1"
                >
-                  {/* Hover Gradient Overlay */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${tool.gradient} opacity-0 group-hover:opacity-[0.03] transition-opacity duration-500`} />
-                  
-                  <div className="relative z-10">
-                     <div className="flex justify-between items-start mb-6">
-                        <span className="text-4xl filter grayscale group-hover:grayscale-0 transition-all duration-500 transform group-hover:scale-110">{tool.icon}</span>
-                        <div className="w-8 h-8 rounded-full border border-slate-100 flex items-center justify-center bg-slate-50 group-hover:bg-violet-50 group-hover:text-violet-600 transition-colors">
-                           <ArrowRight className="w-4 h-4" />
-                        </div>
+                  <div className="flex justify-between items-start mb-6">
+                     {/* Gradient Icon Container */}
+                     <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tool.gradient} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform duration-300`}>
+                        <tool.icon className="w-7 h-7" />
                      </div>
-                     
-                     <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-violet-700 transition-colors">{tool.name}</h3>
-                     <p className="text-sm text-slate-500 leading-relaxed line-clamp-2">{tool.description}</p>
+
+                     <div className="text-slate-300 group-hover:text-violet-500 group-hover:translate-x-1 transition-all duration-300">
+                        <ArrowRight className="w-5 h-5" />
+                     </div>
                   </div>
+                  
+                  <h3 className="font-bold text-lg text-slate-900 mb-2 group-hover:text-violet-700 transition-colors">{tool.name}</h3>
+                  <p className="text-sm text-slate-500 font-medium leading-relaxed line-clamp-2">{tool.description}</p>
                </div>
             ))}
          </div>

@@ -4,71 +4,74 @@
 
 @layer base {
   :root {
-    /* --- The "Ceramic" Palette --- */
-    --background: 0 0% 98%; /* #FAFAFA - Ceramic White */
-    --foreground: 240 10% 4%; /* #0A0A0B - Obsidian Black */
+    /* --- The "Electric" Palette --- */
+    
+    /* Base Backgrounds */
+    --background: 0 0% 98%; /* #fafafa */
+    --foreground: 222 47% 11%; /* #0f172a */
     
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 4%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 4%;
-
-    /* Sophisticated Violet/Electric */
-    --primary: 262 83% 58%; 
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 240 4% 96%;
-    --secondary-foreground: 240 6% 10%;
-
-    --muted: 240 4% 96%;
-    --muted-foreground: 240 4% 46%;
-
-    --accent: 240 4% 96%;
-    --accent-foreground: 240 6% 10%;
-
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 5% 92%;
-    --input: 240 5% 92%;
-    --ring: 262 83% 58%;
-
-    --radius: 0.75rem;
+    --card-foreground: 222 47% 11%;
     
-    /* Physics Variables */
-    --spring-duration: 0.5s;
-    --spring-ease: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    /* Vibrant Purple Primary (#7c3aed) */
+    --primary: 261 84% 58%; 
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary/Muted */
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222 47% 11.2%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222 47% 11.2%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 261 84% 58%;
+    
+    --radius: 0.75rem;
+
+    /* Custom Gradient Tokens */
+    --gradient-primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --gradient-hero: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 50%, #e9d5ff 100%);
   }
-
+ 
   .dark {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
-
-    --card: 240 10% 4%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 240 4% 16%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 240 4% 16%;
-    --muted-foreground: 240 5% 65%;
-
-    --accent: 240 4% 16%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 63% 31%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 240 4% 16%;
-    --input: 240 4% 16%;
-    --ring: 262 83% 58%;
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 261 84% 58%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 261 84% 58%;
   }
 }
 
@@ -77,98 +80,61 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground antialiased selection:bg-violet-100 selection:text-violet-900;
-    font-feature-settings: "cv11", "ss01", "salt";
-  }
-  
-  h1, h2, h3, h4, h5, h6 {
-     @apply tracking-tight;
-     letter-spacing: -0.02em;
+    @apply bg-background text-foreground antialiased selection:bg-purple-100 selection:text-purple-900;
   }
 }
 
 @layer utilities {
-  /* --- The "Obsidian" Glass System --- */
-  
-  .glass-panel {
-    @apply bg-white/60 backdrop-blur-xl border border-white/40 shadow-2xl shadow-black/5 ring-1 ring-black/5;
-  }
+  /* --- Electric Glass System --- */
   
   .glass-card {
-    @apply relative overflow-hidden bg-white/40 backdrop-blur-md border border-white/60 shadow-sm transition-all duration-500 hover:shadow-2xl hover:shadow-violet-500/10 hover:-translate-y-1 hover:bg-white/60;
-  }
-
-  /* --- Physics-Based Micro-interactions --- */
-  
-  .animate-spring {
-     transition: all var(--spring-duration) var(--spring-ease);
-  }
-
-  .perspective-container {
-    perspective: 1000px;
+    @apply bg-white border border-slate-200 shadow-sm transition-all duration-300;
   }
   
-  .rotate-x-12 {
-     transform: rotateX(12deg);
-  }
-
-  /* --- Animations --- */
-  
-  .animate-in-fade {
-    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
+  .glass-card:hover {
+    @apply -translate-y-1 shadow-xl shadow-purple-500/10 border-purple-400 bg-white;
   }
   
-  .animate-in-up {
-    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  
-  /* Stagger delays */
-  .delay-100 { animation-delay: 100ms; }
-  .delay-200 { animation-delay: 200ms; }
-  .delay-300 { animation-delay: 300ms; }
-  .delay-500 { animation-delay: 500ms; }
-
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  /* --- Gradients & Textures --- */
-  
+  /* --- Gradient Text Utilities --- */
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-cyan-500;
+  }
+  
+  .bg-gradient-primary {
+    @apply bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500;
   }
 
-  .mesh-bg {
-    background-color: #fafafa;
-    background-image: 
-        radial-gradient(at 0% 0%, hsla(253,16%,96%,1) 0, transparent 50%), 
-        radial-gradient(at 50% 0%, hsla(225,39%,96%,1) 0, transparent 50%), 
-        radial-gradient(at 100% 0%, hsla(339,49%,96%,1) 0, transparent 50%);
+  /* --- Orbs & Mesh --- */
+  .bg-mesh-purple {
+     background-image: radial-gradient(at 0% 0%, hsla(253,16%,96%,1) 0, transparent 50%), 
+                       radial-gradient(at 50% 0%, hsla(225,39%,96%,1) 0, transparent 50%), 
+                       radial-gradient(at 100% 0%, hsla(339,49%,96%,1) 0, transparent 50%);
+  }
+
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    z-index: 0;
+    pointer-events: none;
   }
   
-  /* --- Scrollbars --- */
+  .orb-purple {
+    background: rgba(139, 92, 246, 0.3);
+  }
   
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+  .orb-cyan {
+    background: rgba(6, 182, 212, 0.2);
   }
-  ::-webkit-scrollbar-track {
-    background: transparent;
+
+  /* Animations */
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
   }
-  ::-webkit-scrollbar-thumb {
-    background: #e2e8f0;
-    border-radius: 99px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #cbd5e1;
+  
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
   }
 }
