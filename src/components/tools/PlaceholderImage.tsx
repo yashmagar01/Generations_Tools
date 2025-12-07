@@ -2,108 +2,74 @@ import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
+import { Image as ImageIcon, Copy, ExternalLink } from 'lucide-react';
 
 const PlaceholderImage = () => {
-  const [imageUrl, setImageUrl] = useState('');
-  const [width, setWidth] = useState(300);
-  const [height, setHeight] = useState(200);
+  const [width, setWidth] = useState(600);
+  const [height, setHeight] = useState(400);
+  const [url, setUrl] = useState('');
 
-  const generateImage = () => {
-    const url = `https://picsum.photos/${width}/${height}?random=${Date.now()}`;
-    setImageUrl(url);
+  const generate = () => {
+    setUrl(`https://picsum.photos/${width}/${height}?random=${Date.now()}`);
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(imageUrl);
+  const copy = () => {
+    if(!url) return;
+    navigator.clipboard.writeText(url);
+    toast.success("URL Copied!");
   };
 
   return (
-    <Card className="p-6 animate-fade-in">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="text-3xl">🖼️</div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Placeholder Image Generator</h2>
-          <p className="text-gray-600">Generate placeholder images for your projects</p>
-        </div>
-      </div>
-      
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              📏 Width (px)
-            </label>
-            <Input
-              type="number"
-              value={width}
-              onChange={(e) => setWidth(parseInt(e.target.value) || 300)}
-              className="w-full"
-              min="50"
-              max="2000"
-            />
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+       <Card className="lg:col-span-1 glass-card p-6 flex flex-col gap-6 h-fit">
+          <div className="flex items-center gap-2 mb-2">
+             <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600"><ImageIcon className="w-5 h-5"/></div>
+             <h2 className="font-bold text-slate-800">Mockup Image</h2>
           </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              📐 Height (px)
-            </label>
-            <Input
-              type="number"
-              value={height}
-              onChange={(e) => setHeight(parseInt(e.target.value) || 200)}
-              className="w-full"
-              min="50"
-              max="2000"
-            />
+
+          <div className="space-y-4">
+             <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                   <label className="text-xs font-bold uppercase text-slate-400">Width</label>
+                   <Input type="number" value={width} onChange={e => setWidth(Number(e.target.value))} className="bg-white/50 border-slate-200" />
+                </div>
+                <div className="space-y-2">
+                   <label className="text-xs font-bold uppercase text-slate-400">Height</label>
+                   <Input type="number" value={height} onChange={e => setHeight(Number(e.target.value))} className="bg-white/50 border-slate-200" />
+                </div>
+             </div>
+             
+             <Button onClick={generate} className="w-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-lg shadow-emerald-500/20">
+                <ImageIcon className="w-4 h-4 mr-2"/> Generate
+             </Button>
           </div>
-        </div>
-        
-        <Button 
-          onClick={generateImage}
-          className="w-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white font-medium py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
-        >
-          🎨 Generate Placeholder Image
-        </Button>
-        
-        {imageUrl && (
-          <div className="mt-6 animate-scale-in">
-            <div className="bg-gray-50 p-4 rounded-lg border text-center">
-              <img 
-                src={imageUrl} 
-                alt={`Placeholder ${width}x${height}`}
-                className="max-w-full h-auto rounded-lg shadow-md mx-auto mb-4"
-                style={{ maxHeight: '300px' }}
-              />
-              
-              <div className="bg-white p-3 rounded border mb-3">
-                <code className="text-sm font-mono text-gray-800 break-all">{imageUrl}</code>
-              </div>
-              
-              <div className="flex justify-center gap-2">
-                <Button
-                  onClick={copyToClipboard}
-                  variant="outline"
-                  size="sm"
-                >
-                  📋 Copy URL
-                </Button>
-                <Button
-                  onClick={() => window.open(imageUrl, '_blank')}
-                  variant="outline"
-                  size="sm"
-                >
-                  🔗 Open Image
-                </Button>
-              </div>
-            </div>
-            
-            <p className="text-sm text-gray-600 mt-2 text-center">
-              🖼️ Perfect for wireframes, mockups, and development!
-            </p>
-          </div>
-        )}
-      </div>
-    </Card>
+       </Card>
+
+       <div className="lg:col-span-2 flex items-center justify-center p-8 rounded-3xl bg-slate-900 shadow-2xl relative overflow-hidden min-h-[400px]">
+           <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.1),transparent)]" />
+           
+           {url ? (
+               <div className="relative z-10 animate-in fade-in zoom-in duration-500">
+                   <img src={url} alt="Random Placeholder" className="rounded-lg shadow-2xl border border-slate-700 max-h-[400px] w-auto mx-auto" />
+                   
+                   <div className="flex justify-center gap-3 mt-6">
+                      <Button onClick={copy} variant="secondary" size="sm">
+                         <Copy className="w-4 h-4 mr-2"/> Copy URL
+                      </Button>
+                      <Button onClick={() => window.open(url, '_blank')} variant="outline" size="sm" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white">
+                         <ExternalLink className="w-4 h-4 mr-2"/> Open
+                      </Button>
+                   </div>
+               </div>
+           ) : (
+               <div className="text-slate-600 text-center">
+                  <ImageIcon className="w-16 h-16 mx-auto mb-4 opacity-20" />
+                  <p>Configure & Generate to see preview</p>
+               </div>
+           )}
+       </div>
+    </div>
   );
 };
 

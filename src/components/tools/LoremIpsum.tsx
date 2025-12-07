@@ -3,104 +3,92 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { FileText, Copy, AlignLeft } from 'lucide-react';
 
 const LoremIpsum = () => {
   const [text, setText] = useState('');
   const [paragraphs, setParagraphs] = useState(3);
   
-  const loremWords = [
-    'lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit',
-    'sed', 'do', 'eiusmod', 'tempor', 'incididunt', 'ut', 'labore', 'et', 'dolore',
-    'magna', 'aliqua', 'enim', 'ad', 'minim', 'veniam', 'quis', 'nostrud',
-    'exercitation', 'ullamco', 'laboris', 'nisi', 'aliquip', 'ex', 'ea', 'commodo',
-    'consequat', 'duis', 'aute', 'irure', 'in', 'reprehenderit', 'voluptate',
-    'velit', 'esse', 'cillum', 'fugiat', 'nulla', 'pariatur', 'excepteur', 'sint',
-    'occaecat', 'cupidatat', 'non', 'proident', 'sunt', 'culpa', 'qui', 'officia',
-    'deserunt', 'mollit', 'anim', 'id', 'est', 'laborum'
-  ];
-
   const generateLorem = () => {
+    const loremWords = ['lorem', 'ipsum', 'dolor', 'sit', 'amet', 'consectetur', 'adipiscing', 'elit', 'curabitur', 'velit', 'ex', 'massa'];
     let result = '';
     for (let p = 0; p < paragraphs; p++) {
-      let paragraph = '';
-      const sentenceCount = Math.floor(Math.random() * 4) + 3; // 3-6 sentences per paragraph
-      
-      for (let s = 0; s < sentenceCount; s++) {
-        const wordCount = Math.floor(Math.random() * 10) + 5; // 5-14 words per sentence
-        let sentence = '';
-        
-        for (let w = 0; w < wordCount; w++) {
-          const word = loremWords[Math.floor(Math.random() * loremWords.length)];
-          sentence += (w === 0 ? word.charAt(0).toUpperCase() + word.slice(1) : word) + ' ';
-        }
-        
-        paragraph += sentence.trim() + '. ';
-      }
-      
-      result += paragraph.trim() + '\n\n';
+       let para = '';
+       for(let s=0; s<5; s++) {
+          for(let w=0; w<8; w++) {
+             const word = loremWords[Math.floor(Math.random() * loremWords.length)];
+             para += (w===0 ? word.charAt(0).toUpperCase() + word.slice(1) : word) + ' ';
+          }
+          para = para.trim() + '. ';
+       }
+       result += para + '\n\n';
     }
-    
     setText(result.trim());
   };
 
   const copyToClipboard = () => {
+    if(!text) { generateLorem(); return; } // Auto generate if empty
     navigator.clipboard.writeText(text);
-    toast.success("Text copied to clipboard!");
+    toast.success("Copied!");
   };
 
   return (
-    <Card className="p-6 animate-fade-in">
-      <div className="flex items-center gap-3 mb-6">
-        <div className="text-3xl">📝</div>
-        <div>
-          <h2 className="text-2xl font-bold text-gray-800">Lorem Ipsum Generator</h2>
-          <p className="text-gray-600">Generate placeholder text</p>
-        </div>
-      </div>
-      
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            📄 Number of Paragraphs: {paragraphs}
-          </label>
-          <Input
-            type="range"
-            min="1"
-            max="10"
-            value={paragraphs}
-            onChange={(e) => setParagraphs(parseInt(e.target.value))}
-            className="w-full"
-          />
-        </div>
-        
-        <Button 
-          onClick={generateLorem}
-          className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-medium py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
-        >
-          ✍️ Generate Lorem Ipsum
-        </Button>
-        
-        {text && (
-          <div className="mt-6 animate-scale-in">
-            <div className="bg-gray-50 p-4 rounded-lg border max-h-80 overflow-y-auto">
-              <p className="text-gray-800 leading-relaxed whitespace-pre-line">{text}</p>
-            </div>
-            <div className="flex justify-center mt-3">
-              <Button
-                onClick={copyToClipboard}
-                variant="outline"
-                className="flex items-center gap-2"
-              >
-                📋 Copy Text
-              </Button>
-            </div>
-            <p className="text-sm text-gray-600 mt-2 text-center">
-              📄 Perfect for mockups and design layouts
-            </p>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+       <Card className="lg:col-span-1 glass-card p-6 flex flex-col gap-6 h-fit">
+          <div className="flex items-center gap-2 mb-2">
+             <div className="p-2 bg-blue-50 rounded-lg text-blue-600"><AlignLeft className="w-5 h-5"/></div>
+             <h2 className="font-bold text-slate-800">Text Generator</h2>
           </div>
-        )}
-      </div>
-    </Card>
+
+          <div className="space-y-4">
+             <div className="space-y-2">
+                <div className="flex justify-between text-xs font-bold uppercase text-slate-400">
+                   <span>Paragraphs</span>
+                   <span>{paragraphs}</span>
+                </div>
+                <Input 
+                   type="range" min="1" max="10" 
+                   value={paragraphs} 
+                   onChange={(e) => setParagraphs(parseInt(e.target.value))}
+                   className="cursor-pointer accent-blue-500 h-2 bg-slate-100 rounded-lg appearance-none"
+                />
+             </div>
+             
+             <Button onClick={generateLorem} className="w-full bg-blue-500 hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20">
+                <FileText className="w-4 h-4 mr-2"/> Generate Text
+             </Button>
+          </div>
+       </Card>
+
+       <div className="lg:col-span-2 relative min-h-[500px]">
+           <div className="absolute inset-0 bg-white shadow-xl shadow-slate-200/50 rounded-3xl border border-slate-100 p-8 overflow-y-auto">
+               <div className="prose prose-slate max-w-none">
+                  {text ? (
+                     text.split('\n\n').map((p, i) => (
+                        <p key={i} className="text-slate-600 leading-relaxed mb-4 animate-in fade-in slide-in-from-bottom-2" style={{ animationDelay: `${i*100}ms` }}>
+                           {p}
+                        </p>
+                     ))
+                  ) : (
+                     <div className="h-full flex flex-col items-center justify-center text-slate-300">
+                        <FileText className="w-16 h-16 mb-4 opacity-20" />
+                        <p>Generated text will appear here</p>
+                     </div>
+                  )}
+               </div>
+               
+               {text && (
+                  <Button onClick={copyToClipboard} size="icon" className="absolute top-4 right-4 bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 shadow-sm">
+                     <Copy className="w-4 h-4" />
+                  </Button>
+               )}
+           </div>
+           
+           {/* Document Stack Effect */}
+           <div className="absolute top-2 left-2 right-2 bottom-0 bg-white rounded-3xl border border-slate-200 -z-10 translate-y-2 shadow-sm" />
+           <div className="absolute top-4 left-4 right-4 bottom-0 bg-white rounded-3xl border border-slate-200 -z-20 translate-y-4 shadow-sm" />
+       </div>
+    </div>
   );
 };
 

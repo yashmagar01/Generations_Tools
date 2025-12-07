@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RefreshCw, Copy, Fingerprint } from 'lucide-react';
+import { RefreshCw, Copy, Fingerprint, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 type IDType = 'uuid' | 'nanoid' | 'cuid';
@@ -11,119 +11,81 @@ const UniqueID = () => {
   const [id, setId] = useState('');
   const [type, setType] = useState<IDType>('uuid');
 
-  const generateUUID = () => {
-    // RFC4122 version 4 UUID
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      const r = Math.random() * 16 | 0;
-      const v = c === 'x' ? r : (r & 0x3 | 0x8);
-      return v.toString(16);
-    });
-  };
-
-  const generateNanoID = (length = 21) => {
-    // URL-friendly unique string ID generator
-    const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-        result += alphabet[Math.floor(Math.random() * alphabet.length)];
-    }
-    return result;
-  };
-
-  const generateCUID = () => {
-    // A simplified CUID-like structure for demo (timestamp + counter + random fingerprint)
-    const timestamp = Date.now().toString(36);
-    const random = Math.random().toString(36).substr(2, 4);
-    const counter = Math.floor(Math.random() * 1000).toString(16);
-    return `c${timestamp}${counter}${random}`;
-  };
-
   const generateID = () => {
     let newId = '';
-    switch(type) {
-        case 'uuid': newId = generateUUID(); break;
-        case 'nanoid': newId = generateNanoID(); break;
-        case 'cuid': newId = generateCUID(); break;
+    if(type === 'uuid') {
+        newId = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            const r = Math.random() * 16 | 0; return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+    } else if (type === 'nanoid') {
+        const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz-';
+        for (let i = 0; i < 21; i++) newId += alphabet[Math.floor(Math.random() * alphabet.length)];
+    } else {
+        newId = `c${Date.now().toString(36)}${Math.random().toString(36).substr(2, 4)}`;
     }
     setId(newId);
   };
   
-  // Initial generation
-  useEffect(() => {
-     generateID();
-  }, [type]);
+  useEffect(() => { generateID(); }, [type]);
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(id);
-    toast.success("ID copied to clipboard!");
+    toast.success("Copied!");
   };
 
   return (
-    <Card className="p-6 animate-fade-in shadow-lg hover:shadow-xl transition-shadow duration-300">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
-          <div className="text-3xl bg-blue-100 p-2 rounded-lg">🆔</div>
-          <div>
-            <h2 className="text-2xl font-bold text-gray-800">Unique ID</h2>
-            <p className="text-gray-600">Generate secure unique identifiers</p>
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-full">
+       <Card className="lg:col-span-1 glass-card p-6 flex flex-col gap-6 h-fit">
+          <div className="flex items-center gap-2 mb-2">
+             <div className="p-2 bg-indigo-50 rounded-lg text-indigo-600"><Fingerprint className="w-5 h-5"/></div>
+             <h2 className="font-bold text-slate-800">ID System</h2>
           </div>
-        </div>
-        
-        <div className="w-40">
-           <Select value={type} onValueChange={(v: IDType) => setType(v)}>
-             <SelectTrigger>
-               <SelectValue placeholder="Type" />
-             </SelectTrigger>
-             <SelectContent>
-               <SelectItem value="uuid">UUID v4</SelectItem>
-               <SelectItem value="nanoid">NanoID</SelectItem>
-               <SelectItem value="cuid">CUID</SelectItem>
-             </SelectContent>
-           </Select>
-        </div>
-      </div>
-      
-      <div className="space-y-6">
-        <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 relative group text-center">
-             <div className="flex justify-center mb-3">
-                <span className="text-xs font-mono px-2 py-1 rounded bg-gray-800 text-gray-400 uppercase">
-                    {type}
-                </span>
+
+          <div className="space-y-4">
+             <div className="space-y-2">
+                <label className="text-xs font-bold uppercase text-slate-400">Format</label>
+                <Select value={type} onValueChange={(v: IDType) => setType(v)}>
+                   <SelectTrigger className="bg-white/50 border-slate-200"><SelectValue /></SelectTrigger>
+                   <SelectContent>
+                      <SelectItem value="uuid">UUID v4</SelectItem>
+                      <SelectItem value="nanoid">NanoID</SelectItem>
+                      <SelectItem value="cuid">CUID</SelectItem>
+                   </SelectContent>
+                </Select>
              </div>
              
-             <code className="text-xl font-mono text-blue-400 break-all block mb-4">
-                {id}
-             </code>
+             <div className="p-4 bg-slate-50 rounded-xl text-xs text-slate-500 leading-relaxed border border-slate-100">
+                {type === 'uuid' && "Universal unique identifier. Best for database primary keys."}
+                {type === 'nanoid' && "URL-friendly, compact, and secure. Great for frontend routes."}
+                {type === 'cuid' && "Collision-resistant ids optimized for horizontal scaling."}
+             </div>
 
-             <div className="flex justify-center gap-3">
-                <Button
-                    onClick={generateID}
-                    variant="secondary"
-                    size="sm"
-                    className="bg-gray-800 text-gray-300 hover:text-white hover:bg-gray-700"
-                >
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Regenerate
-                </Button>
-                <Button
-                    onClick={copyToClipboard}
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
-                    size="sm"
-                >
-                    <Copy className="w-4 h-4 mr-2" />
-                    Copy
-                </Button>
-            </div>
-        </div>
-        
-        <p className="text-sm text-gray-500 text-center flex items-center justify-center gap-2">
-           <Fingerprint className="w-4 h-4" />
-           {type === 'uuid' && "Ideal for database primary keys and long-term unique storage."}
-           {type === 'nanoid' && "Perfect for URL-shorteners and frontend usage."}
-           {type === 'cuid' && "Collision-resistant ids optimized for horizontal scaling."}
-        </p>
-      </div>
-    </Card>
+             <Button onClick={generateID} variant="outline" className="w-full border-indigo-200 text-indigo-700 hover:bg-indigo-50">
+                <RefreshCw className="w-4 h-4 mr-2"/> Regenerate
+             </Button>
+          </div>
+       </Card>
+
+       <div className="lg:col-span-2 flex items-center justify-center p-8 rounded-3xl bg-slate-900 shadow-2xl relative overflow-hidden text-center min-h-[400px]">
+           <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(79,70,229,0.1)_1px,transparent_1px),linear-gradient(-45deg,rgba(79,70,229,0.1)_1px,transparent_1px)] [background-size:20px_20px]" />
+           
+           <div className="relative z-10 w-full max-w-2xl animate-in fade-in zoom-in">
+               <div className="inline-flex items-center gap-2 mb-8 px-4 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-400 text-xs font-mono uppercase tracking-wider">
+                  <ShieldCheck className="w-3 h-3 text-emerald-500" />
+                  Collision Resistant
+               </div>
+               
+               <div onClick={copyToClipboard} className="group cursor-pointer">
+                  <h1 className="text-3xl md:text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 via-white to-indigo-200 tracking-wider break-all leading-tight">
+                     {id}
+                  </h1>
+                  <p className="mt-4 text-slate-500 text-sm opacity-0 group-hover:opacity-100 transition-opacity">
+                     Click to Copy
+                  </p>
+               </div>
+           </div>
+       </div>
+    </div>
   );
 };
 
