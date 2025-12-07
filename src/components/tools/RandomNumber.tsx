@@ -138,6 +138,20 @@ const RandomNumber = () => {
             <label htmlFor="fraction" className="text-sm font-medium cursor-pointer">Generate Fraction</label>
           </div>
         </div>
+
+        <div className="bg-gray-50 p-4 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              🔢 How many numbers?
+            </label>
+            <Input
+              type="number"
+              min="1"
+              max="50"
+              value={count}
+              onChange={(e) => setCount(parseInt(e.target.value) || 1)}
+              className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+            />
+        </div>
         
         <Button 
           onClick={generateNumber}

@@ -118,7 +118,7 @@ const PasswordGenerator = () => {
         {password && (
           <div className="mt-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="bg-gray-900 p-6 rounded-xl border border-gray-800 relative group text-center">
-              <code className="text-xl font-mono text-emerald-400 break-all display-block mb-2">
+              <code className="text-xl font-mono text-emerald-400 break-all block mb-2">
                 {password}
               </code>
               <Button
