@@ -13,6 +13,7 @@ const RandomNumber = () => {
   const [includeDecimals, setIncludeDecimals] = useState(false);
   const [decimalPrecision, setDecimalPrecision] = useState(2);
   const [includeFraction, setIncludeFraction] = useState(false);
+  const [count, setCount] = useState(1);
 
   const generateNumber = () => {
     const minVal = Number(min);
@@ -28,30 +29,31 @@ const RandomNumber = () => {
       return;
     }
 
-    let result: number | string;
-    
-    if (includeFraction) {
-      // Generate fraction
-      // For fractions, we can perhaps use min/max to bound the numerator/denominator 
-      // or just keep it simple as random "small" fractions.
-      // Let's stick to the previous simple logic but perhaps a bit more controlled if we wanted, 
-      // but for now, the user didn't specify strict range requirements for fractions, so we'll keep it randomized
-      // but strictly ensure it's a valid fraction.
-      const numerator = Math.floor(Math.random() * maxVal) + 1; // Basic heuristic using max as bounds
-      const denominator = Math.floor(Math.random() * maxVal) + 1;
-      result = `${numerator}/${denominator}`;
-    } else {
-      if (includeDecimals) {
-        // Generate decimal
-        const num = Math.random() * (maxVal - minVal) + minVal;
-        result = num.toFixed(decimalPrecision);
-      } else {
-        // Generate integer
-        result = Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal;
-      }
+    if (count < 1 || count > 50) {
+      toast.error("Please enter a count between 1 and 50");
+      return;
     }
+
+    const generateSingle = () => {
+      if (includeFraction) {
+        // Generate fraction
+        const numerator = Math.floor(Math.random() * maxVal) + 1;
+        const denominator = Math.floor(Math.random() * maxVal) + 1;
+        return `${numerator}/${denominator}`;
+      } else {
+        if (includeDecimals) {
+          // Generate decimal
+          const num = Math.random() * (maxVal - minVal) + minVal;
+          return num.toFixed(decimalPrecision);
+        } else {
+          // Generate integer
+          return (Math.floor(Math.random() * (maxVal - minVal + 1)) + minVal).toString();
+        }
+      }
+    };
     
-    setNumber(result.toString());
+    const newNumbers = Array.from({ length: count }, generateSingle);
+    setNumber(newNumbers.join(', '));
   };
 
   const copyToClipboard = () => {
