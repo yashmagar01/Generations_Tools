@@ -66,7 +66,7 @@ const Footer = () => {
              <ul className="space-y-4 text-sm text-slate-500 font-medium">
                 <li><a href="/tools" className="hover:text-purple-600 transition-colors">All Generators</a></li>
                 <li><a href="/#features" className="hover:text-purple-600 transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-purple-600 transition-colors">Changelog</a></li>
+                <li><a href="/changelog" className="hover:text-purple-600 transition-colors">Changelog</a></li>
                 <li><a href="#" className="hover:text-purple-600 transition-colors">Roadmap</a></li>
              </ul>
           </div>
