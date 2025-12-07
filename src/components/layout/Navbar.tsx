@@ -1,145 +1,124 @@
-import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, Github, Sparkles } from 'lucide-react';
+import { Sparkles, Github, Menu, X } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Handle scroll effect for glassmorphism intensity
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    // Handle scroll effect for glassmorphism intensity and update state
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'How it Works', href: '#how-it-works' },
-    { name: 'All Tools', href: '/tools' },
+    { name: 'Generators', path: '/tools' },
+    { name: 'About', path: '/#how-it-works' },
   ];
 
-  const handleNavigation = (href: string) => {
-    setIsMobileMenuOpen(false);
-    if (href.startsWith('http')) {
-      window.open(href, '_blank', 'noopener,noreferrer');
-      return;
-    }
-    
-    if (href.startsWith('/')) {
-      navigate(href);
-    } else {
-      // Scroll to section if on home, otherwise go home first
+  const handleNavigation = (path: string) => {
+    setMobileMenuOpen(false);
+    if (path.startsWith('/#')) {
       if (location.pathname !== '/') {
         navigate('/');
         setTimeout(() => {
-           document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+           const element = document.getElementById(path.substring(2));
+           element?.scrollIntoView({ behavior: 'smooth' });
         }, 100);
       } else {
-        document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+         const element = document.getElementById(path.substring(2));
+         element?.scrollIntoView({ behavior: 'smooth' });
       }
+    } else {
+      navigate(path);
     }
   };
 
   return (
-    <nav 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/70 backdrop-blur-xl border-b border-white/20 shadow-sm' 
-          : 'bg-transparent border-transparent'
-      }`}
-    >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${scrolled ? 'bg-white/80 backdrop-blur-xl border-slate-200/50 shadow-sm py-3' : 'bg-transparent border-transparent py-5'}`}>
+      <div className="container mx-auto px-4">
+        <div className="flex items-center justify-between">
           
           {/* Logo */}
-          <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center text-white shadow-lg">
-              <span className="font-bold text-lg sm:text-xl">U</span>
+          <div 
+             className="flex items-center gap-2 cursor-pointer group" 
+             onClick={() => navigate('/')}
+          >
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center text-white shadow-lg shadow-slate-900/20 group-hover:scale-105 transition-transform duration-300">
+               <Sparkles className="w-4 h-4 text-violet-400" />
             </div>
-            <span className="text-xl sm:text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-              UtilityHub
+            <span className="font-bold text-lg tracking-tight text-slate-900">
+               Utility<span className="text-slate-400">Hub</span>
             </span>
           </div>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavigation(link.href)}
-                className="text-sm font-medium text-slate-600 hover:text-indigo-600 transition-colors"
-              >
-                {link.name}
-              </button>
-            ))}
-            
-            <div className="h-6 w-px bg-slate-200" />
-            
-            <a 
-              href="https://github.com/yashmagar01/Generations_Tools" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="text-slate-500 hover:text-slate-900 transition-colors"
-            >
-              <Github className="w-5 h-5" />
-            </a>
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-8">
+             <div className="flex items-center gap-6">
+                {navLinks.map(link => (
+                   <button 
+                     key={link.name}
+                     onClick={() => handleNavigation(link.path)}
+                     className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors"
+                   >
+                     {link.name}
+                   </button>
+                ))}
+             </div>
+             
+             <div className="h-4 w-px bg-slate-200" />
 
-            <Button 
-              onClick={() => navigate('/tools')}
-              className="bg-slate-900 hover:bg-slate-800 text-white rounded-full px-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
-            >
-              Get Started
-            </Button>
+             <div className="flex items-center gap-3">
+                <Button 
+                   variant="ghost" 
+                   size="sm" 
+                   className="text-slate-500 hover:text-slate-900"
+                   onClick={() => window.open('https://github.com', '_blank')}
+                >
+                   <Github className="w-4 h-4" />
+                </Button>
+                <Button 
+                   onClick={() => navigate('/tools')}
+                   className="bg-slate-900 hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 rounded-lg px-6 h-9 text-xs font-bold uppercase tracking-wide"
+                >
+                   Launch App
+                </Button>
+             </div>
           </div>
 
-          {/* Mobile Menu Button */}
-          <div className="md:hidden">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
-            >
-              {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+          {/* Mobile Menu Toggle */}
+          <button 
+             className="md:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
       </div>
 
-      {/* Mobile Navigation Dropdown */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-gray-100 shadow-xl animate-in slide-in-from-top-2">
-          <div className="px-4 py-4 space-y-3">
-            {navLinks.map((link) => (
-              <button
-                key={link.name}
-                onClick={() => handleNavigation(link.href)}
-                className="block w-full text-left px-4 py-3 text-base font-medium text-slate-600 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors"
-              >
-                {link.name}
-              </button>
-            ))}
-            <div className="h-px bg-slate-100 my-2" />
-             <button
-                onClick={() => handleNavigation('https://github.com/yashmagar01/Generations_Tools')}
-                className="w-full flex items-center gap-2 px-4 py-3 text-base font-medium text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-xl transition-colors"
-              >
-                <Github className="w-5 h-5" />
-                GitHub Repo
-              </button>
-            <Button 
-              onClick={() => handleNavigation('/tools')}
-              className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl py-6 text-lg shadow-lg"
-            >
-              Launch App <Sparkles className="w-5 h-5 ml-2" />
-            </Button>
-          </div>
-        </div>
+      {/* Mobile Menu */}
+      {mobileMenuOpen && (
+         <div className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-b border-slate-100 p-4 md:hidden animate-in slide-in-from-top-2">
+            <div className="flex flex-col gap-2">
+               {navLinks.map(link => (
+                   <button 
+                     key={link.name}
+                     onClick={() => handleNavigation(link.path)}
+                     className="w-full text-left px-4 py-3 rounded-xl hover:bg-slate-50 font-medium text-slate-700"
+                   >
+                     {link.name}
+                   </button>
+                ))}
+                <div className="h-px bg-slate-100 my-2" />
+                <Button onClick={() => navigate('/tools')} className="w-full bg-slate-900 text-white">
+                   Launch App
+                </Button>
+            </div>
+         </div>
       )}
     </nav>
   );
