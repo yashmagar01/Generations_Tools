@@ -99,8 +99,10 @@ const ColorPalette = () => {
                          {color.locked ? <Lock className="w-5 h-5" /> : <Unlock className="w-5 h-5"/>}
                       </Button>
                       <button 
+                         type="button"
                          onClick={() => copyToClipboard(color.hex)}
-                         className="bg-white/90 backdrop-blur px-4 py-2 rounded-xl font-mono text-lg font-bold shadow-lg hover:scale-105 transition-transform"
+                         aria-label={`Copy color ${color.hex} to clipboard`}
+                         className="bg-white/90 backdrop-blur px-4 py-2 rounded-xl font-mono text-lg font-bold shadow-lg hover:scale-105 transition-transform cursor-pointer"
                       >
                          {color.hex}
                       </button>

@@ -271,10 +271,12 @@ const Index = () => {
                 <div className="grid grid-cols-5 gap-2">
                   {colorPalette.map((color, index) => (
                     <div key={index} className="text-center">
-                      <div
-                        className="w-full h-20 rounded cursor-pointer border-2 border-gray-200"
+                      <button
+                        type="button"
+                        className="w-full h-20 rounded border-2 border-gray-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-transform hover:scale-105"
                         style={{ backgroundColor: color }}
                         onClick={() => copyToClipboard(color)}
+                        aria-label={`Copy color ${color} to clipboard`}
                         title="Click to copy"
                       />
                       <p className="text-sm mt-1 font-mono">{color}</p>
@@ -703,13 +705,15 @@ const Index = () => {
                 <div className="space-y-2">
                   <div className="flex flex-wrap gap-2">
                     {hashtags.map((tag, index) => (
-                      <span
+                      <button
                         key={index}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full cursor-pointer hover:bg-blue-200"
+                        type="button"
+                        className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full cursor-pointer hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
                         onClick={() => copyToClipboard(tag)}
+                        aria-label={`Copy hashtag ${tag}`}
                       >
                         {tag}
-                      </span>
+                      </button>
                     ))}
                   </div>
                   <Button
