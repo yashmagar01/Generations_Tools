@@ -133,9 +133,9 @@ const Tools = () => {
         </header>
 
         {/* Mobile Header */}
-        <header className="lg:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100 p-4 flex items-center justify-between">
+        <header className="lg:hidden sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-slate-100 px-4 py-3 pt-[env(safe-area-inset-top)] flex items-center justify-between transition-all duration-300">
            <div className="flex items-center gap-3">
-              <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="-ml-2 hover:bg-slate-100 rounded-full">
+              <Button variant="ghost" size="icon" onClick={() => navigate('/')} className="-ml-2 hover:bg-slate-100 rounded-full active:scale-95 transition-transform">
                 <ArrowLeft className="w-5 h-5 text-slate-700" />
               </Button>
               <div className="flex items-center gap-2">
@@ -143,27 +143,33 @@ const Tools = () => {
                  <span className="font-bold text-lg text-slate-900">{currentTool?.name}</span>
               </div>
            </div>
-           <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={isMobileMenuOpen ? 'bg-slate-100' : ''}>
+           <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`active:scale-95 transition-transform ${isMobileMenuOpen ? 'bg-slate-100' : ''}`}>
               <LayoutGrid className="w-5 h-5 text-slate-700" />
            </Button>
         </header>
 
         {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
-           <div className="lg:hidden fixed inset-x-0 top-[73px] bottom-0 z-30 bg-white/95 backdrop-blur-2xl p-4 overflow-y-auto animate-in slide-in-from-top-2">
+           <div className="lg:hidden fixed inset-0 z-50 bg-white/95 backdrop-blur-3xl p-4 pt-24 pb-[env(safe-area-inset-bottom)] overflow-y-auto animate-in slide-in-from-bottom-10 duration-300">
+              <div className="flex items-center justify-between mb-6 px-2">
+                <h2 className="text-2xl font-bold text-slate-900">All Tools</h2>
+                <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(false)} className="rounded-full bg-slate-100">
+                  <ArrowLeft className="w-5 h-5" />
+                </Button>
+              </div>
               <div className="grid grid-cols-2 gap-3 pb-20">
                  {generators.map((gen) => (
                     <button
                       key={gen.id}
                       onClick={() => setActiveGenerator(gen.id)}
-                      className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all ${
+                      className={`flex flex-col items-center justify-center p-4 rounded-3xl border transition-all active:scale-95 duration-200 ${
                         activeGenerator === gen.id 
-                          ? 'border-indigo-200 bg-indigo-50/50 text-indigo-700 shadow-sm' 
-                          : 'border-slate-100 bg-white text-slate-600 hover:border-slate-200'
+                          ? 'border-indigo-200 bg-indigo-50/50 text-indigo-700 shadow-sm ring-2 ring-indigo-100'
+                          : 'border-slate-100 bg-white text-slate-600 shadow-sm'
                       }`}
                     >
-                       <span className="text-3xl mb-2">{gen.icon}</span>
-                       <span className="text-sm font-medium">{gen.name}</span>
+                       <span className="text-4xl mb-3 drop-shadow-sm">{gen.icon}</span>
+                       <span className="text-sm font-bold tracking-tight">{gen.name}</span>
                     </button>
                  ))}
               </div>

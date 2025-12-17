@@ -1,3 +1,3 @@
-## 2024-05-23 - Interactive Elements Semantics
-**Learning:** Interactive elements like color swatches and tags were implemented as `div` and `span` with `onClick`, making them inaccessible to keyboard users and screen readers.
-**Action:** Always use `<button>` for interactive elements or add `role="button"` with `tabIndex={0}` and keyboard event handlers. Using `<button>` is preferred as it handles focus and keyboard events natively.
+## 2024-05-23 - Mobile Safe Areas
+**Learning:** Modern mobile web apps must account for safe areas (notch, home indicator) using `env(safe-area-inset-*)` CSS variables.
+**Action:** Always add `pb-[env(safe-area-inset-bottom)]` to fixed bottom navigation or full-screen overlays, and `pt-[env(safe-area-inset-top)]` to sticky headers to ensure content isn't obscured by system UI.

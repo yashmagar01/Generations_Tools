@@ -130,7 +130,7 @@ const Home = () => {
             </div>
 
             {/* Massive Headline */}
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter text-slate-900 mb-8 leading-[0.9] font-display animate-in slide-in-from-bottom-8 duration-700 delay-100">
+            <h1 className="text-5xl md:text-8xl lg:text-9xl font-extrabold tracking-tighter text-slate-900 mb-8 leading-[0.95] md:leading-[0.9] font-display animate-in slide-in-from-bottom-8 duration-700 delay-100">
               The <span className="text-gradient-electric">Ultimate</span><br />
               Toolkit.
             </h1>
