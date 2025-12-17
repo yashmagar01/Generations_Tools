@@ -53,9 +53,19 @@ const HashtagGenerator = () => {
                   <div className="h-full flex flex-col">
                      <div className="flex-1 flex flex-wrap content-start gap-3">
                         {hashtags.map((tag, i) => (
-                           <span key={i} className="px-4 py-2 rounded-full bg-pink-50 text-pink-600 font-medium text-sm border border-pink-100 animate-in zoom-in" style={{ animationDelay: `${i*50}ms` }}>
+                           <button
+                              key={i}
+                              type="button"
+                              onClick={() => {
+                                 navigator.clipboard.writeText(tag);
+                                 toast.success(`Copied ${tag}`);
+                              }}
+                              aria-label={`Copy hashtag ${tag}`}
+                              className="px-4 py-2 rounded-full bg-pink-50 text-pink-600 font-medium text-sm border border-pink-100 animate-in zoom-in hover:bg-pink-100 hover:scale-105 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
+                              style={{ animationDelay: `${i*50}ms` }}
+                           >
                               {tag}
-                           </span>
+                           </button>
                         ))}
                      </div>
                      <Button onClick={copy} variant="outline" className="w-full mt-6 border-pink-200 text-pink-700 hover:bg-pink-50">
