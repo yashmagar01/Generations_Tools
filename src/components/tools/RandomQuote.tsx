@@ -61,7 +61,7 @@ const RandomQuote = () => {
            {quote ? (
                <div className="relative z-10 max-w-2xl text-center animate-in fade-in zoom-in duration-700 slide-in-from-bottom-4">
                   <div className="text-8xl text-indigo-100 font-display font-black mb-6 leading-none select-none">“</div>
-                  <blockquote className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-8 font-display tracking-tight text-gradient-iridescent bg-clip-text text-transparent bg-gradient-to-br from-slate-900 to-slate-700">
+                  <blockquote className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-tight mb-8 font-display tracking-tight">
                      {quote.text}
                   </blockquote>
                   <cite className="block text-indigo-500 font-medium tracking-widest uppercase text-xs mb-12">
