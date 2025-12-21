@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { RefreshCw, Copy, Fingerprint, ShieldCheck } from 'lucide-react';
+import { RefreshCw, Copy, Fingerprint, ShieldCheck, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { copyToClipboard, shareContent, canShare, hapticFeedback } from '@/lib/native';
 
 type IDType = 'uuid' | 'nanoid' | 'cuid';
 
@@ -28,9 +29,16 @@ const UniqueID = () => {
   
   useEffect(() => { generateID(); }, [type]);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(id);
-    toast.success("Copied!");
+  const handleCopy = async () => {
+    const success = await copyToClipboard(id);
+    if (success) {
+      toast.success("Copied!");
+    }
+  };
+
+  const handleShare = async () => {
+    await hapticFeedback('medium');
+    await shareContent({ title: 'Generated ID', text: id });
   };
 
   return (
@@ -75,7 +83,7 @@ const UniqueID = () => {
                   Collision Resistant
                </div>
                
-               <div onClick={copyToClipboard} className="group cursor-pointer">
+               <div onClick={handleCopy} className="group cursor-pointer">
                   <h1 className="text-3xl md:text-5xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-200 via-white to-indigo-200 tracking-wider break-all leading-tight">
                      {id}
                   </h1>
@@ -83,6 +91,12 @@ const UniqueID = () => {
                      Click to Copy
                   </p>
                </div>
+               
+               {canShare() && (
+                 <Button onClick={handleShare} variant="outline" size="sm" className="mt-4 rounded-full border-indigo-400 text-indigo-300 hover:bg-indigo-900/30">
+                   <Share2 className="w-4 h-4 mr-2" /> Share
+                 </Button>
+               )}
            </div>
        </div>
     </div>

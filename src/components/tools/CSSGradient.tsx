@@ -5,6 +5,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RefreshCw, Copy, Layers, Palette } from 'lucide-react';
 import { toast } from 'sonner';
+import { copyToClipboard as nativeCopy } from '@/lib/native';
 
 type GradientType = 'linear' | 'radial' | 'conic';
 
@@ -35,9 +36,11 @@ const CSSGradient = () => {
 
   useEffect(() => { generateRandomColors(); }, []);
 
-  const copyCSS = () => {
-    navigator.clipboard.writeText(`background: ${gradient};`);
-    toast.success("CSS copied!");
+  const copyCSS = async () => {
+    const success = await nativeCopy(`background: ${gradient};`);
+    if (success) {
+      toast.success("CSS copied!");
+    }
   };
 
   return (

@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-import { Shield, Copy, RefreshCw, Sliders, CheckCircle2 } from 'lucide-react';
+import { Shield, Copy, RefreshCw, Sliders, CheckCircle2, Share2 } from 'lucide-react';
+import { copyToClipboard, shareContent, canShare, hapticFeedback } from '@/lib/native';
 
 const PasswordGenerator = () => {
   const [password, setPassword] = useState('');
@@ -57,9 +58,25 @@ const PasswordGenerator = () => {
      generatePassword();
   }, [length, options]);
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(password);
-    toast.success("Password copied!");
+  const handleCopy = async () => {
+    const success = await copyToClipboard(password);
+    if (success) {
+      toast.success("Password copied!");
+    } else {
+      toast.error("Failed to copy");
+    }
+  };
+
+  const handleShare = async () => {
+    await hapticFeedback('medium');
+    const success = await shareContent({
+      title: 'Generated Password',
+      text: password,
+    });
+    if (!success) {
+      // Fallback to copy if share not available
+      await handleCopy();
+    }
   };
 
   const toggleOption = (key: keyof typeof options) => {
@@ -136,7 +153,7 @@ const PasswordGenerator = () => {
                    </div>
                </div>
 
-               <div onClick={copyToClipboard} className="group cursor-pointer relative break-all">
+               <div onClick={handleCopy} className="group cursor-pointer relative break-all">
                    <h1 className="text-4xl md:text-5xl font-mono font-bold text-white tracking-wider group-hover:text-emerald-200 transition-colors">
                       {password}
                    </h1>
@@ -152,10 +169,17 @@ const PasswordGenerator = () => {
                   />
                </div>
 
-               <div className="pt-8">
-                  <Button onClick={copyToClipboard} size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-8 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-transform">
-                     Copy Password
+               <div className="pt-8 flex gap-3 justify-center">
+                  <Button onClick={handleCopy} size="lg" className="bg-emerald-500 hover:bg-emerald-600 text-white rounded-full px-8 shadow-lg shadow-emerald-500/20 hover:scale-105 transition-transform">
+                     <Copy className="w-4 h-4 mr-2" />
+                     Copy
                   </Button>
+                  {canShare() && (
+                    <Button onClick={handleShare} size="lg" variant="outline" className="rounded-full px-6 border-emerald-300 text-emerald-600 hover:bg-emerald-50">
+                       <Share2 className="w-4 h-4 mr-2" />
+                       Share
+                    </Button>
+                  )}
                </div>
            </div>
        </div>

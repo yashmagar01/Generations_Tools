@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Nirmeeti</string>
+    <string name="title_activity_main">Nirmeeti</string>
+    <string name="package_name">com.yashmagar.nirmeeti</string>
+    <string name="custom_url_scheme">com.yashmagar.nirmeeti</string>
+</resources>

@@ -81,6 +81,34 @@
   }
   body {
     @apply bg-background text-foreground antialiased selection:bg-purple-100 selection:text-purple-900;
+    
+    /* Mobile Safe Area Support */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: contain;
+    
+    /* Optimize touch behavior */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  
+  /* Ensure minimum touch targets (48x48 per Material Design) */
+  button, 
+  a, 
+  [role="button"],
+  .clickable {
+    min-height: 44px;
+  }
+  
+  /* Disable text selection on interactive elements */
+  button,
+  [role="button"] {
+    user-select: none;
+    -webkit-user-select: none;
   }
 }
 

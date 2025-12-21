@@ -1,27 +1,32 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'app.lovable.c29bb8a7fae240239894fc6a18fec846',
-  appName: 'lovable-utility-nexus',
+  appId: 'com.yashmagar.nirmeeti',
+  appName: 'Nirmeeti',
   webDir: 'dist',
-  server: {
-    url: 'https://c29bb8a7-fae2-4023-9894-fc6a18fec846.lovableproject.com?forceHideBadge=true',
-    cleartext: true
-  },
+  // App uses bundled local assets for fully offline operation
   plugins: {
     SplashScreen: {
       launchShowDuration: 2000,
-      backgroundColor: '#6366f1',
+      backgroundColor: '#0f0f23',
       androidSplashResourceName: 'splash',
       androidScaleType: 'CENTER_CROP',
-      showSpinner: false,
+      showSpinner: true,
       androidSpinnerStyle: 'large',
       iosSpinnerStyle: 'small',
-      spinnerColor: '#ffffff',
+      spinnerColor: '#6366f1',
       splashFullScreen: true,
       splashImmersive: true,
       layoutName: 'launch_screen',
       useDialog: true,
+    },
+    StatusBar: {
+      style: 'DARK',
+      backgroundColor: '#0f0f23',
+    },
+    Keyboard: {
+      resize: 'body',
+      style: 'DARK',
     },
   },
 };

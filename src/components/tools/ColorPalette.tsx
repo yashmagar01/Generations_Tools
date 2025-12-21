@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Lock, Unlock, Copy, RefreshCw, Palette } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from 'sonner';
+import { copyToClipboard as nativeCopy, hapticFeedback } from '@/lib/native';
 
 interface Color {
   hex: string;
@@ -49,9 +50,11 @@ const ColorPalette = () => {
     setColors(prev => prev.map((c, i) => i === index ? { ...c, locked: !c.locked } : c));
   };
 
-  const copyToClipboard = (color: string) => {
-    navigator.clipboard.writeText(color);
-    toast.success(`Copied ${color}`);
+  const handleCopyColor = async (color: string) => {
+    const success = await nativeCopy(color);
+    if (success) {
+      toast.success(`Copied ${color}`);
+    }
   };
 
   return (
@@ -100,7 +103,7 @@ const ColorPalette = () => {
                       </Button>
                       <button 
                          type="button"
-                         onClick={() => copyToClipboard(color.hex)}
+                         onClick={() => handleCopyColor(color.hex)}
                          aria-label={`Copy color ${color.hex} to clipboard`}
                          className="bg-white/90 backdrop-blur px-4 py-2 rounded-xl font-mono text-lg font-bold shadow-lg hover:scale-105 transition-transform cursor-pointer"
                       >

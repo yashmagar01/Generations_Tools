@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RefreshCw, Copy, MapPin, Mail, AtSign, Fingerprint } from 'lucide-react';
+import { RefreshCw, Copy, MapPin, Mail, AtSign, Fingerprint, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { copyToClipboard as nativeCopy, shareContent, canShare, hapticFeedback } from '@/lib/native';
 
 interface Profile {
   name: string;
@@ -40,11 +41,22 @@ const ProfileGenerator = () => {
     });
   };
 
-  const copyToClipboard = () => {
+  const handleCopy = async () => {
     if (!profile) return;
     const text = `Name: ${profile.name}\nRole: ${profile.role}\nEmail: ${profile.email}\nLocation: ${profile.location}`;
-    navigator.clipboard.writeText(text);
-    toast.success("Profile copied!");
+    const success = await nativeCopy(text);
+    if (success) {
+      toast.success("Profile copied!");
+    }
+  };
+
+  const handleShare = async () => {
+    if (!profile) return;
+    await hapticFeedback('medium');
+    await shareContent({
+      title: 'Generated Profile',
+      text: `Name: ${profile.name}\nRole: ${profile.role}\nEmail: ${profile.email}\nLocation: ${profile.location}`,
+    });
   };
 
   return (
@@ -89,9 +101,16 @@ const ProfileGenerator = () => {
                        </div>
                     </div>
 
-                    <Button onClick={copyToClipboard} variant="outline" className="w-full mt-6 border-slate-200 hover:bg-slate-50">
-                       <Copy className="w-4 h-4 mr-2"/> Copy Details
-                    </Button>
+                    <div className="flex gap-2 mt-6">
+                       <Button onClick={handleCopy} variant="outline" className="flex-1 border-slate-200 hover:bg-slate-50">
+                          <Copy className="w-4 h-4 mr-2"/> Copy
+                       </Button>
+                       {canShare() && (
+                         <Button onClick={handleShare} variant="outline" className="flex-1 border-teal-200 text-teal-600 hover:bg-teal-50">
+                            <Share2 className="w-4 h-4 mr-2"/> Share
+                         </Button>
+                       )}
+                    </div>
                  </div>
              </div>
           ) : (

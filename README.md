@@ -1,20 +1,20 @@
-# UtilityHub - Premium Developer Tools Suite
+# Nirmeeti - Premium Developer Tools Suite
 
 ![Project Banner](https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1200&q=80)
 
 ## 👋 Meet the Developer
 
 Hi there! I'm **Yash Magar**, a passionate Full Stack Developer dedicated to
-building clean, high-performance web applications. I specialize in React
-ecosystem, UI/UX design, and creating intuitive digital experiences.
+building clean, high-performance web and mobile applications. I specialize in
+React ecosystem, UI/UX design, and creating intuitive digital experiences.
 
-**UtilityHub** was born from a simple idea: developers shouldn't have to search
+**Nirmeeti** was born from a simple idea: developers shouldn't have to search
 for 12 different websites to do 5 simple tasks. I wanted to build a centralized,
 privacy-focused home for the daily tools we all use.
 
 ## 🚀 About the Project
 
-**UtilityHub** is a modern, all-in-one generator suite designed for developers,
+**Nirmeeti** is a modern, all-in-one generator suite designed for developers,
 designers, and content creators. It features a polished "Glassmorphism" UI,
 instant client-side processing, and a distraction-free experience.
 
@@ -26,6 +26,7 @@ instant client-side processing, and a distraction-free experience.
   generation.
 - **🎨 Premium UI/UX**: Features a "Bento Grid" dashboard, smooth animations,
   and a unified sidebar navigation.
+- **📱 Native Android App**: Available as a fully offline Android application!
 - **🛠️ 12+ Powerful Tools**:
   - **Security**: Password Generator (with Strength Meter), Unique ID
     (UUID/NanoID).
@@ -35,18 +36,52 @@ instant client-side processing, and a distraction-free experience.
 
 ---
 
-## 💻 How to Use
+## 📱 Android App
+
+Nirmeeti is also available as a **native Android application** with enhanced
+mobile features!
+
+### Native Features
+
+- 🔋 **Fully Offline**: All tools work without internet connection
+- 📤 **Native Share**: Share generated content via Android share menu
+- 📋 **Native Clipboard**: Seamless copy functionality with haptic feedback
+- 📳 **Haptic Feedback**: Tactile response on button presses
+- 🎨 **Optimized UI**: Touch-friendly interface with safe area support
+
+### Build from Source
+
+**Prerequisites:**
+
+- Node.js (v18 or higher)
+- Android Studio (with Android SDK)
+
+**Steps:**
+
+1. **Clone and Install Dependencies**
+   ```bash
+   git clone https://github.com/yashmagar01/Generations_Tools.git
+   cd Generations_Tools
+   npm install
+   ```
+
+2. **Build and Open in Android Studio**
+   ```bash
+   npm run android:build
+   ```
+
+3. In Android Studio, select your device/emulator and click "Run"
+
+---
+
+## 💻 Web Version
 
 ### 🌐 Live Demo
 
 You can access the hosted version of the application here:
-**[View Live Demo](https://generations-tools.vercel.app/)**\
-
+**[View Live Demo](https://generations-tools.vercel.app/)**
 
 ### 🛠️ Run Locally
-
-If you prefer to run the project on your own machine or contribute to its
-development, follow these simple steps:
 
 **Prerequisites:**
 
@@ -80,7 +115,20 @@ development, follow these simple steps:
 
 - **Frontend**: React 18, TypeScript, Vite
 - **Styling**: Tailwind CSS, Shadcn/UI, Lucide Icons
+- **Mobile**: Capacitor (Android/iOS)
 - **Architecture**: Single Page Application (SPA), Client-Side Logic
+
+---
+
+## 📦 Available Scripts
+
+| Command                 | Description                               |
+| ----------------------- | ----------------------------------------- |
+| `npm run dev`           | Start development server                  |
+| `npm run build`         | Build production web assets               |
+| `npm run android:build` | Build web and open Android Studio         |
+| `npm run android:sync`  | Sync web assets to Android project        |
+| `npm run android:run`   | Build and run on connected Android device |
 
 ---
 

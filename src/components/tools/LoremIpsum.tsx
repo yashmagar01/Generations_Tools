@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { FileText, Copy, AlignLeft } from 'lucide-react';
+import { copyToClipboard as nativeCopy } from '@/lib/native';
 
 const LoremIpsum = () => {
   const [text, setText] = useState('');
@@ -26,10 +27,12 @@ const LoremIpsum = () => {
     setText(result.trim());
   };
 
-  const copyToClipboard = () => {
+  const handleCopy = async () => {
     if(!text) { generateLorem(); return; } // Auto generate if empty
-    navigator.clipboard.writeText(text);
-    toast.success("Copied!");
+    const success = await nativeCopy(text);
+    if (success) {
+      toast.success("Copied!");
+    }
   };
 
   return (
@@ -78,7 +81,7 @@ const LoremIpsum = () => {
                </div>
                
                {text && (
-                  <Button onClick={copyToClipboard} size="icon" className="absolute top-4 right-4 bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 shadow-sm">
+                  <Button onClick={handleCopy} size="icon" className="absolute top-4 right-4 bg-white hover:bg-slate-50 text-slate-600 border border-slate-200 shadow-sm">
                      <Copy className="w-4 h-4" />
                   </Button>
                )}

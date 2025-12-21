@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { Hash, Copy, TrendingUp } from 'lucide-react';
+import { copyToClipboard as nativeCopy } from '@/lib/native';
 
 const HashtagGenerator = () => {
   const [keyword, setKeyword] = useState('');
@@ -18,9 +19,18 @@ const HashtagGenerator = () => {
     ]);
   };
 
-  const copy = () => {
-    navigator.clipboard.writeText(hashtags.join(' '));
-    toast.success("Hashtags copied!");
+  const handleCopy = async () => {
+    const success = await nativeCopy(hashtags.join(' '));
+    if (success) {
+      toast.success("Hashtags copied!");
+    }
+  };
+
+  const handleCopyTag = async (tag: string) => {
+    const success = await nativeCopy(tag);
+    if (success) {
+      toast.success(`Copied ${tag}`);
+    }
   };
 
   return (
@@ -56,10 +66,7 @@ const HashtagGenerator = () => {
                            <button
                               key={i}
                               type="button"
-                              onClick={() => {
-                                 navigator.clipboard.writeText(tag);
-                                 toast.success(`Copied ${tag}`);
-                              }}
+                              onClick={() => handleCopyTag(tag)}
                               aria-label={`Copy hashtag ${tag}`}
                               className="px-4 py-2 rounded-full bg-pink-50 text-pink-600 font-medium text-sm border border-pink-100 animate-in zoom-in hover:bg-pink-100 hover:scale-105 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
                               style={{ animationDelay: `${i*50}ms` }}
@@ -68,7 +75,7 @@ const HashtagGenerator = () => {
                            </button>
                         ))}
                      </div>
-                     <Button onClick={copy} variant="outline" className="w-full mt-6 border-pink-200 text-pink-700 hover:bg-pink-50">
+                     <Button onClick={handleCopy} variant="outline" className="w-full mt-6 border-pink-200 text-pink-700 hover:bg-pink-50">
                         <Copy className="w-4 h-4 mr-2"/> Copy All
                      </Button>
                   </div>

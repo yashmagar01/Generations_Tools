@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { Quote, Copy, Share2, Sparkles } from 'lucide-react';
+import { copyToClipboard as nativeCopy, shareContent, canShare, hapticFeedback } from '@/lib/native';
 
 interface QuoteData {
   text: string;
@@ -28,10 +29,22 @@ const RandomQuote = () => {
     setQuote(quotes[Math.floor(Math.random() * quotes.length)]);
   };
 
-  const copy = () => {
+  const handleCopy = async () => {
     if (quote) {
-      navigator.clipboard.writeText(`"${quote.text}" - ${quote.author}`);
-      toast.success("Quote copied!");
+      const success = await nativeCopy(`"${quote.text}" - ${quote.author}`);
+      if (success) {
+        toast.success("Quote copied!");
+      }
+    }
+  };
+
+  const handleShare = async () => {
+    if (quote) {
+      await hapticFeedback('medium');
+      await shareContent({
+        title: 'Quote',
+        text: `"${quote.text}" - ${quote.author}`,
+      });
     }
   };
 
@@ -69,11 +82,11 @@ const RandomQuote = () => {
                   </cite>
 
                   <div className="flex justify-center gap-4 opacity-0 group-hover:opacity-100 transition-opacity duration-500 transform translate-y-2 group-hover:translate-y-0">
-                     <Button onClick={copy} variant="outline" className="border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 rounded-full h-12 px-6">
+                     <Button onClick={handleCopy} variant="outline" className="border-slate-200 text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50 rounded-full h-12 px-6">
                         <Copy className="w-4 h-4 mr-2" /> Copy Quote
                      </Button>
-                     {navigator.share && (
-                        <Button onClick={() => navigator.share({title:'Quote', text: quote.text})} variant="ghost" className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full h-12 px-6">
+                     {canShare() && (
+                        <Button onClick={handleShare} variant="ghost" className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-full h-12 px-6">
                            <Share2 className="w-4 h-4 mr-2" /> Share
                         </Button>
                      )}

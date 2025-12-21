@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
 import { Dices, Hash, Gauge, Copy } from 'lucide-react';
+import { copyToClipboard as nativeCopy } from '@/lib/native';
 
 const RandomNumber = () => {
   const [result, setResult] = useState<string>('?');
@@ -36,9 +37,11 @@ const RandomNumber = () => {
     }
   };
 
-  const copy = () => {
-     navigator.clipboard.writeText(result);
-     toast.success("Copied!");
+  const handleCopy = async () => {
+     const success = await nativeCopy(result);
+     if (success) {
+       toast.success("Copied!");
+     }
   };
 
   return (
@@ -81,7 +84,7 @@ const RandomNumber = () => {
              <div className="text-[120px] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-violet-500 to-indigo-600 leading-none select-all relative">
                  {result}
              </div>
-             <Button variant="ghost" size="sm" onClick={copy} className="mt-4 text-slate-400 hover:text-violet-600">
+             <Button variant="ghost" size="sm" onClick={handleCopy} className="mt-4 text-slate-400 hover:text-violet-600">
                 <Copy className="w-4 h-4 mr-2" /> Copy Result
              </Button>
           </div>
